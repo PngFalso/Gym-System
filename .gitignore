@@ -1,0 +1,19 @@
+# Configurações locais e credenciais
+.env
+.env.*
+!.env.example
+
+# Dependências do projeto
+node_modules/
+
+# Arquivos gerados
+dist/
+build/
+coverage/
+
+# Logs
+*.log
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
