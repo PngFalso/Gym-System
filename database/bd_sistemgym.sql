@@ -1,37 +1,33 @@
-drop database sistema_gym;
-create database if not exists sistema_gym;
+DROP database sistema_gym;
+CREATE DATABASE IF NOT EXISTS sistema_gym;
 
-use sistema_gym;
+USE sistema_gym;
 
-create table cadastro_prof(
-	id_prof int not null unique primary key,
-	CPF varchar(14) not null unique,
-	nome varchar(100) not null,
-	email varchar(150) not null unique,
-	data_nascimento date not null,
-	telefone varchar(18) not null,
-	genero varchar(50),
-    senha varchar(100) not null
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    cpf VARCHAR(14) NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    data_nascimento DATE NOT NULL,
+    telefone VARCHAR(18) NOT NULL,
+    genero VARCHAR(50),
+    senha VARCHAR(255) NOT NULL
 );
 
-create table cadastro_aluno(
-	id_aluno int not null unique primary key,
-    CPF varchar(14) not null unique,
-	nome varchar(100) not null,
-	email varchar(150) not null unique,
-	data_nascimento date not null,
-	telefone varchar(18) not null,
-	genero varchar(50),
-    senha varchar(100) not null
-    );
-    
-create table exercicio(
-	id int not null unique primary key,
-	nome varchar(200) not null unique,
-    maquinas_utensilios varchar(200),
-	descricao text
-    );
-    
+CREATE TABLE alunos (
+    id_usuario INT PRIMARY KEY,
+    FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+);
 
-	
-    
+CREATE TABLE professores (
+    id_usuario INT PRIMARY KEY,
+    FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE funcionarios (
+    id_usuario INT PRIMARY KEY,
+    FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+);
