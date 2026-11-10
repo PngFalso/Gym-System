@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Professor</title>
+</head>
+<body style="background-color: rgb(34, 27, 27); margin: 0; font-family: sans-serif; color: white;">
+
+    <header style="background-color: #2b2525; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444;">
+        <nav>
+            <button onclick="mudarAba('treinos')" id="btn-treinos" style="background: none; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid #007bff;">
+                Treinos
+            </button>
+            <button onclick="mudarAba('alunos')" id="btn-alunos" style="background: none; border: none; color: #aaa; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid transparent;">
+                Alunos
+            </button>
+        </nav>
+
+        <div style="font-size: 18px; font-weight: bold;" id="nome-professor">
+            Nome_professor
+        </div>
+    </header>
+
+    <main style="padding: 30px; max-width: 900px; margin: 0 auto;">
+
+        <section id="aba-treinos" style="display: block;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Gerenciamento de Treinos</h2>
+                
+                <button onclick="window.location.href='criar-treino.html'" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+    Criar Treino
+</button>
+            </div>
+            
+            <input type="text" id="campo-pesquisa" onkeyup="filtrarTreinos()" placeholder="Pesquisar treino..." style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;">
+
+            <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;">
+                    <li style="padding: 15px; border-bottom: 1px solid #444; font-size: 18px;">Peito e Tríceps</li>
+                    <li style="padding: 15px; border-bottom: 1px solid #444; font-size: 18px;">Costas e Bíceps</li>
+                    <li style="padding: 15px; border-bottom: 1px solid #444; font-size: 18px;">Pernas e Ombro</li>
+                    <li style="padding: 15px; font-size: 18px;">Cardio e Abdomen</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="aba-alunos" style="display: none;">
+            <h2>Lista de Alunos</h2>
+            <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; padding: 20px;">
+                <p style="font-size: 18px;">Área destinada ao cadastro de alunos.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function mudarAba(nomeAba) {
+            document.getElementById('aba-treinos').style.display = nomeAba === 'treinos' ? 'block' : 'none';
+            document.getElementById('aba-alunos').style.display = nomeAba === 'alunos' ? 'block' : 'none';
+            
+            document.getElementById('btn-treinos').style.borderColor = nomeAba === 'treinos' ? '#007bff' : 'transparent';
+            document.getElementById('btn-alunos').style.borderColor = nomeAba === 'alunos' ? '#007bff' : 'transparent';
+        }
+
+        function filtrarTreinos() {
+            let input = document.getElementById("campo-pesquisa").value.toLowerCase();
+            let itens = document.getElementById("lista-treinos").getElementsByTagName("li");
+
+            for (let item of itens) {
+                let texto = item.textContent || item.innerText;
+                item.style.display = texto.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
