@@ -4,95 +4,80 @@
     <meta charset="UTF-8">
     <title>Cadastro Professor</title>
 </head>
-<body  style="background-color: rgb(34, 27, 27);">
+<body  style="background-color: rgb(34, 27, 27); margin: 0; display: flex; flex-direction:column; align-items: center; min-height: 100;">
 
 <h1 style="text-align: center;margin-top: 40px;font-size: 35px;color:white">Cadastro Professor</h1>
 
 <!--todas as colunas -->
-<div style="width: 900px; margin-left: 300px; display: flex; justify-content: space-between; color: white";>
+<div style="width: 900px; display: flex; justify-content: space-between; color: white; margin-top:40px">
 
 <!--colunas da esquerda -->
-<div style="margin-left: 0px;">
+<div style="display: flex; flex-direction:column; gap: 60px;">
 
-<div style=" margin-top: 0px;">
+<div style="display: flex; flex-direction:column; gap: 8px;">
 
-    <label for="nome" style="font-size: 25px; margin-left: 95px; margin-top: 10px; font-weight: bold;">Nome completo</label>
+    <label for="nome" style="font-size: 25px; font-weight: bold; text-align: center;">Nome completo</label>
 
-    <br>
-
-    <input type="text" id="nome" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
+    <input type="text" id="nome" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 
-<div style=" margin-top: 40px;">
+<div style=" display: flex; flex-direction: column; gap: 8px;">
 
-    <label for="data nascimento" style="font-size: 25px; margin-left: 80px; font-weight: bold;">Data de nascimento</label>
+    <label for="data nascimento" style="font-size: 25px; font-weight: bold;text-align: center;">Data de nascimento</label>
+
+    <input type="date" id="data" style="font-size: 20px; padding: 5px; width: 340px;">
+</div>
+
+<div style=" display: flex; flex-direction: column; gap: 8px;">
+
+    <label for="telefone" style="font-size: 25px; font-weight: bold;text-align: center;">telefone</label>
     
-    <br>
-
-    <input type="date" id="data" style="font-size: 20px; margin-left: 0px; padding: 5px; width: 340px;">
+    <input type="tel" id="telefone" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 
-<div style=" margin-top: 40px;">
+<div style=" display: flex; flex-direction: column; gap: 8px;">
 
-    <label for="telefone" style="font-size: 25px; margin-left: 130px;margin-top: 10px; font-weight: bold;">telefone</label>
-    
-    <br>
+    <label for="genero" style="font-size: 25px; font-weight: bold;text-align: center;">genero</label>
 
-    <input type="tel" id="telefone" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
-</div>
-
-<div style=" margin-top: 40px;">
-
-    <label for="genero" style="font-size: 25px; margin-left: 130px; font-weight: bold;">genero</label>
-    
-    <br>
-
-    <input type="text" id="genero" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
+    <input type="text" id="genero" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 </div>
-<br>
 
 <!--colunas da direita-->
-<div style="margin-left: 100px; margin-top: 0px;">
+<div style="display: flex; flex-direction:column; gap: 60px;">
 
-<div style=" margin-left: 100px; margin-top: 0px;">
+<div style="display: flex; flex-direction:column; gap: 8px;">
 
-    <label for="email" style="font-size: 25px; margin-left: 135px; font-weight: bold;">e-mail</label>
+    <label for="email" style="font-size: 25px; font-weight: bold;text-align: center;">e-mail</label>
 
-    <br>
 
-    <input type="e-mail" id="e-mail" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
+    <input type="e-mail" id="e-mail" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 
-<div style=" margin-left: 100px; margin-top: 40px;">
+<div style=" display: flex; flex-direction:column; gap: 8px;">
 
-    <label for="cpf" style="font-size: 25px; margin-left: 150px; font-weight: bold;">cpf</label>
-    
-    <br>
+    <label for="cpf" style="font-size: 25px;font-weight: bold;text-align: center;">cpf</label>
 
-    <input type="number" id="cpf" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
+    <input type="number" id="cpf" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 
-<div style=" margin-left: 100px; margin-top: 40px;">
+<div style="display: flex; flex-direction:column; gap: 8px;">
 
-    <label for="senha" style="font-size: 25px; margin-left: 130px; font-weight: bold;">senha</label>
-    
-    <br>
+    <label for="senha" style="font-size: 25px; font-weight: bold;text-align: center;">senha</label>
 
-    <input type="password" id="senha" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
+    <input type="password" id="senha" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 
-<div style=" margin-left: 100px; margin-top: 40px;">
+<div style=" display: flex; flex-direction:column; gap: 8px;">
 
-    <label for="endereço" style="font-size: 25px; margin-left: 130px; font-weight: bold;">endereço</label>
-    
-    <br>
+    <label for="endereço" style="font-size: 25px; font-weight: bold;text-align: center;">endereço</label>
 
-    <input type="text" id="endereço" style="font-size: 20px; margin-left: 0px; margin-top: 10px; padding: 5px; width: 340px;">
+
+    <input type="text" id="endereço" style="font-size: 20px; padding: 5px; width: 340px;">
 </div>
 </div>
 </div>
-<div style="margin-left: 640px; margin-top: 80px;">
+<div style="display: flex; flex-direction: column; margin-top: 100px">
     <button type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px; cursor: pointer;">
         Confirmar
     </button>
