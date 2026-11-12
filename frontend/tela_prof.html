@@ -7,12 +7,15 @@
 <body style="background-color: rgb(34, 27, 27); margin: 0; font-family: sans-serif; color: white;">
 
     <header style="background-color: #2b2525; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444;">
-        <nav>
+        <nav style="display: flex; gap: 10px;">
             <button onclick="mudarAba('treinos')" id="btn-treinos" style="background: none; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid #007bff;">
-                Treinos
+                exercício
             </button>
             <button onclick="mudarAba('alunos')" id="btn-alunos" style="background: none; border: none; color: #aaa; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid transparent;">
                 Alunos
+            </button>
+            <button onclick="mudarAba('agenda')" id="btn-agenda" style="background: none; border: none; color: #aaa; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid transparent;">
+                Agenda
             </button>
         </nav>
 
@@ -23,32 +26,79 @@
 
     <main style="padding: 30px; max-width: 900px; margin: 0 auto;">
 
+        <!-- Seção Treinos -->
         <section id="aba-treinos" style="display: block;">
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin: 0;">Gerenciamento de Treinos</h2>
+                <h2 style="margin: 0;">Gerenciamento de Exercício</h2>
                 
-                <button onclick="window.location.href='criar-treino.html'" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-    Criar Treino
-</button>
+                <button onclick="window.location.href='cadas_treino.html'" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Criar Exercício
+                </button>
             </div>
             
-            <input type="text" id="campo-pesquisa" onkeyup="filtrarTreinos()" placeholder="Pesquisar treino..." style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;">
+            <input type="text" id="campo-pesquisa" onkeyup="filtrarTreinos()" placeholder="Pesquisar exercício..." style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;">
 
             <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
                 <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;">
-                    <li style="padding: 15px; border-bottom: 1px solid #444; font-size: 18px;">Peito e Tríceps</li>
-                    <li style="padding: 15px; border-bottom: 1px solid #444; font-size: 18px;">Costas e Bíceps</li>
-                    <li style="padding: 15px; border-bottom: 1px solid #444; font-size: 18px;">Pernas e Ombro</li>
-                    <li style="padding: 15px; font-size: 18px;">Cardio e Abdomen</li>
+                    
+                    <li style="border-bottom: 1px solid #444;">
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Supino Reto com Barra</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Peitoral, tríceps e ombro anterior.<br>
+                                <strong>Descrição:</strong> Deitado no banco reto, segure a barra com uma pegada um pouco mais aberta que a largura dos ombros, desça controlando até o peito e empurre para cima.
+                            </p>
+                        </details>
+                    </li>
+
+                    <li style="border-bottom: 1px solid #444;">
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Puxada Alta</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Dorsais (costas) e bíceps.<br>
+                                <strong>Descrição:</strong> Sentado na máquina, puxe a barra em direção à parte superior do peito, mantendo o tronco levemente inclinado para trás e contraindo as costas.
+                            </p>
+                        </details>
+                    </li>
+
+                    <li style="border-bottom: 1px solid #444;">
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Leg Press 45º</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Quadríceps, glúteos e posteriores.<br>
+                                <strong>Descrição:</strong> Apoiado no equipamento com os pés na largura dos ombros, empurre a plataforma controlando o movimento na descida sem deixar os joelhos dobrarem para dentro.
+                            </p>
+                        </details>
+                    </li>
+
+                    <li>
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Elevação Lateral</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Deltoides (ombros - porção lateral).<br>
+                                <strong>Descrição:</strong> Em pé com halteres ao lado do corpo, eleve os braços lateralmente até a altura dos ombros com uma leve flexão nos cotovelos.
+                            </p>
+                        </details>
+                    </li>
+
                 </ul>
             </div>
         </section>
 
+        <!-- Seção Alunos -->
         <section id="aba-alunos" style="display: none;">
             <h2>Lista de Alunos</h2>
             <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; padding: 20px;">
                 <p style="font-size: 18px;">Área destinada ao cadastro de alunos.</p>
+            </div>
+        </section>
+
+        <!-- Seção Agenda -->
+        <section id="aba-agenda" style="display: none;">
+            <h2>Agenda de Horários / Aulas</h2>
+            <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; padding: 20px;">
+                <p style="font-size: 18px;">Área destinada ao gerenciamento da agenda e horários dos alunos.</p>
             </div>
         </section>
 
@@ -58,9 +108,16 @@
         function mudarAba(nomeAba) {
             document.getElementById('aba-treinos').style.display = nomeAba === 'treinos' ? 'block' : 'none';
             document.getElementById('aba-alunos').style.display = nomeAba === 'alunos' ? 'block' : 'none';
+            document.getElementById('aba-agenda').style.display = nomeAba === 'agenda' ? 'block' : 'none';
             
             document.getElementById('btn-treinos').style.borderColor = nomeAba === 'treinos' ? '#007bff' : 'transparent';
+            document.getElementById('btn-treinos').style.color = nomeAba === 'treinos' ? 'white' : '#aaa';
+
             document.getElementById('btn-alunos').style.borderColor = nomeAba === 'alunos' ? '#007bff' : 'transparent';
+            document.getElementById('btn-alunos').style.color = nomeAba === 'alunos' ? 'white' : '#aaa';
+
+            document.getElementById('btn-agenda').style.borderColor = nomeAba === 'agenda' ? '#007bff' : 'transparent';
+            document.getElementById('btn-agenda').style.color = nomeAba === 'agenda' ? 'white' : '#aaa';
         }
 
         function filtrarTreinos() {
