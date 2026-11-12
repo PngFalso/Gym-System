@@ -6,40 +6,44 @@
 </head>
 <body style="background-color: rgb(34, 27, 27);">
 
-<h1 style="text-align: center;margin-top: 40px;font-size: 55px;color:white">Bem Vindo</h1>
+<h1 style="text-align: center; margin-top: 40px; font-size: 55px; color: white;">Bem Vindo</h1>
 
-<h2 style="text-align: center;margin-top: 40px;font-size: 30px;color:white">escolha uma opção: </h2>
+<h2 style="text-align: center; margin-top: 20px; margin-bottom: 60px; font-size: 30px; color: white;">escolha uma opção: </h2>
 
-<h3 style="margin-left: 300px; margin-top: 50px;font-size: 40px;color:white">Usuario </h3>
+<div style="display: flex; justify-content: center; align-items: flex-start; gap: 200px; position: relative;">
 
-<h4 style="margin-left: 1050px; margin-top: -80px;font-size: 40px;color:white">Professor </h4>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <h3 style="font-size: 40px; color: white; margin-bottom: 60px; margin-top: 0;">Usuario </h3>
 
-<div style="margin-left: 50%;margin-top: -80px;">
-<div style="border-left: 3px dashed white; height: 480px; margin: 40px auto;"> </div>
-</div>
+        <div style="margin-bottom: 100px;">
+            <button onclick="window.location.href='login_usuario.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px;">
+                Login Usuario
+            </button>
+        </div>
+        <div>
+            <button onclick="window.location.href='cadas_usuario.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px;">
+                Cadastro Usuario
+            </button>
+        </div>
+    </div>
 
-<div style="margin-left: 15%; margin-top: -420px;">
-    <button onclick="window.location.href='login_usuario.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px; cursor: pointer;">
-        Login Usuario
-    </button>
-</div>
+    <div style="border-left: 3px dashed white; height: 450px;"></div>
 
-<div style="margin-left: 202px; margin-top: 100px;">
-    <button onclick="window.location.href='cadas_usuario.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px; cursor: pointer;">
-        Cadastro Usuario
-    </button>
-</div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <h4 style="font-size: 40px; color: white; margin-bottom: 60px; margin-top: 0;">Professor </h4>
+        <div style="margin-bottom: 100px;">
+            <button onclick="window.location.href='login_prof.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px;">
+                Login Professor
+            </button>
+        </div>
+        <div>
+            <button onclick="window.location.href='cadas_prof.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px;">
+                Cadastro Professor
+            </button>
+        </div>
+    </div>
 
-<div style="margin-left: 64%; margin-top: -215px;">
-    <button onclick="window.location.href='login_prof.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px; cursor: pointer;">
-        Login Professor
-    </button>
-</div>
-
-<div style="margin-left: 948px; margin-top: 100px;">
-    <button onclick="window.location.href='cadas_prof.html'" type="submit" style="background-color: #42444d; color:white; border:none; font-size: 30px; font-weight: bold; padding: 12px 40px; border-radius: 6px; cursor: pointer;">
-        Cadastro Professor
-    </button>
 </div>
 
 </body>
+</html>
