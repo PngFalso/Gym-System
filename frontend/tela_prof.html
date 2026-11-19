@@ -2,47 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel do Professor — Agenda</title>
-    <style>
-        /* Estilos da agenda */
-        .item-agenda {
-            border-bottom: 1px solid #444;
-            transition: opacity 0.2s, background-color 0.2s;
-        }
-        .item-agenda:last-child {
-            border-bottom: none;
-        }
-        .item-agenda:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-        }
-        .item-agenda label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            cursor: pointer;
-        }
-        .check-concluido {
-            width: 20px;
-            height: 20px;
-            accent-color: #28a745;
-            cursor: pointer;
-        }
-        .item-agenda:has(.check-concluido:checked) {
-            opacity: 0.45;
-        }
-        .item-agenda:has(.check-concluido:checked) .info-agenda {
-            text-decoration: line-through;
-        }
-    </style>
+    <title>Painel do Professor — Exercícios</title>
 </head>
 <body style="background-color: rgb(34, 27, 27); margin: 0; font-family: sans-serif; color: white;">
 
     <!-- Cabeçalho -->
     <header style="background-color: #2b2525; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444;">
         <nav style="display: flex; gap: 10px;">
-            <button type="button" id="btn-agenda" style="background: none; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid #007bff;">
-                Agenda
+            <button type="button" id="btn-treinos" style="background: none; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid #007bff;">
+                exercício
             </button>
         </nav>
 
@@ -53,65 +21,79 @@
 
     <main style="padding: 30px; max-width: 900px; margin: 0 auto;">
 
-        <!-- Seção Agenda -->
-        <section id="aba-agenda" style="display: block;">
-            <h2 style="margin-top: 0; margin-bottom: 20px;">Agenda de Horários / Aulas</h2>
-
-            <!-- Formulário de agendamento -->
-            <form action="/agendamentos" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                <input type="text" name="aluno_nome" placeholder="Nome do Aluno" required style="flex: 2; min-width: 180px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white;">
+        <!-- Seção Exercícios -->
+        <section id="aba-treinos" style="display: block;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Gerenciamento de Exercício</h2>
                 
-                <input type="date" name="data_agendamento" required style="flex: 1; min-width: 140px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; color-scheme: dark;">
-                
-                <input type="time" name="hora_agendamento" required style="flex: 1; min-width: 110px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; color-scheme: dark;">
-                
-                <select name="tipo_atividade" required style="flex: 1; min-width: 160px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white;">
-                    <option value="avaliacao_fisica">Avaliação Física</option>
-                    <option value="montagem_treino">Montagem de Treino</option>
-                    <option value="acompanhamento">Acompanhamento</option>
-                </select>
-
-                <button type="submit" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                    Agendar
+                <button onclick="window.location.href='cadas_treino.html'" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Criar Exercício
                 </button>
-            </form>
+            </div>
+            
+            <input type="text" id="campo-pesquisa" onkeyup="filtrarTreinos()" placeholder="Pesquisar exercício..." style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;">
 
-            <!-- Lista de agendamentos -->
             <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
-                <ul id="lista-agenda" style="list-style-type: none; padding: 0; margin: 0;">
-                    <li class="item-agenda" data-id="1">
-                        <label>
-                            <div class="info-agenda">
-                                <strong style="font-size: 17px;">20/11/2026 às 08:00 — Lucas Silva</strong>
-                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Avaliação Física</div>
-                            </div>
-                            <input type="checkbox" name="concluido" value="1" class="check-concluido">
-                        </label>
+                <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;">
+                    
+                    <li style="border-bottom: 1px solid #444;">
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Supino Reto com Barra</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Peitoral, tríceps e ombro anterior.<br>
+                                <strong>Descrição:</strong> Deitado no banco reto, segure a barra com uma pegada um pouco mais aberta que a largura dos ombros, desça controlando até o peito e empurre para cima.
+                            </p>
+                        </details>
                     </li>
 
-                    <li class="item-agenda" data-id="2">
-                        <label>
-                            <div class="info-agenda">
-                                <strong style="font-size: 17px;">20/11/2026 às 09:30 — Mariana Costa</strong>
-                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Montagem de Treino</div>
-                            </div>
-                            <input type="checkbox" name="concluido" value="2" class="check-concluido">
-                        </label>
+                    <li style="border-bottom: 1px solid #444;">
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Puxada Alta</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Dorsais (costas) e bíceps.<br>
+                                <strong>Descrição:</strong> Sentado na máquina, puxe a barra em direção à parte superior do peito, mantendo o tronco levemente inclinado para trás e contraindo as costas.
+                            </p>
+                        </details>
                     </li>
 
-                    <li class="item-agenda" data-id="3">
-                        <label>
-                            <div class="info-agenda">
-                                <strong style="font-size: 17px;">20/11/2026 às 14:00 — Pedro Henrique</strong>
-                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Acompanhamento</div>
-                            </div>
-                            <input type="checkbox" name="concluido" value="3" class="check-concluido">
-                        </label>
+                    <li style="border-bottom: 1px solid #444;">
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Leg Press 45º</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Quadríceps, glúteos e posteriores.<br>
+                                <strong>Descrição:</strong> Apoiado no equipamento com os pés na largura dos ombros, empurre a plataforma controlando o movimento na descida sem deixar os joelhos dobrarem para dentro.
+                            </p>
+                        </details>
                     </li>
+
+                    <li>
+                        <details style="padding: 15px; cursor: pointer;">
+                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Elevação Lateral</summary>
+                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
+                                <strong>Foco:</strong> Deltoides (ombros - porção lateral).<br>
+                                <strong>Descrição:</strong> Em pé com halteres ao lado do corpo, eleve os braços lateralmente até a altura dos ombros com uma leve flexão nos cotovelos.
+                            </p>
+                        </details>
+                    </li>
+
                 </ul>
             </div>
         </section>
 
     </main>
+
+    <!-- Script de filtro -->
+    <script>
+        function filtrarTreinos() {
+            let input = document.getElementById("campo-pesquisa").value.toLowerCase();
+            let itens = document.getElementById("lista-treinos").getElementsByTagName("li");
+
+            for (let item of itens) {
+                let texto = item.textContent || item.innerText;
+                item.style.display = texto.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+    </script>
 </body>
 </html>
