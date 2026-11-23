@@ -17,3 +17,11 @@ coverage/
 # Arquivos temporários do sistema
 .DS_Store
 Thumbs.db
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Ambiente virtual Python
+venv/
+.venv/
