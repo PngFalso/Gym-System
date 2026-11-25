@@ -13,4 +13,3 @@ def conectar_banco():
     )
 
     return conexao
-
