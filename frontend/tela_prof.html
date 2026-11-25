@@ -144,7 +144,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin: 0;">Gerenciamento de Exercício</h2>
                 
-                <button onclick="window.location.href='cadas_treino.html'" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                <button onclick="abrirSubtelaCriarExercicio()" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
                     Cadastrar Exercício
                 </button>
             </div>
@@ -153,47 +153,6 @@
 
             <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
                 <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;">
-                    
-                    <li style="border-bottom: 1px solid #444;">
-                        <details style="padding: 15px; cursor: pointer;">
-                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Supino Reto com Barra</summary>
-                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
-                                <strong>Foco:</strong> Peitoral, tríceps e ombro anterior.<br>
-                                <strong>Descrição:</strong> Deitado no banco reto, segure a barra com uma pegada um pouco mais aberta que a largura dos ombros, desça controlando até o peito e empurre para cima.
-                            </p>
-                        </details>
-                    </li>
-
-                    <li style="border-bottom: 1px solid #444;">
-                        <details style="padding: 15px; cursor: pointer;">
-                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Puxada Alta</summary>
-                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
-                                <strong>Foco:</strong> Dorsais (costas) e bíceps.<br>
-                                <strong>Descrição:</strong> Sentado na máquina, puxe a barra em direção à parte superior do peito, mantendo o tronco levemente inclinado para trás e contraindo as costas.
-                            </p>
-                        </details>
-                    </li>
-
-                    <li style="border-bottom: 1px solid #444;">
-                        <details style="padding: 15px; cursor: pointer;">
-                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Leg Press 45º</summary>
-                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
-                                <strong>Foco:</strong> Quadríceps, glúteos e posteriores.<br>
-                                <strong>Descrição:</strong> Apoiado no equipamento com os pés na largura dos ombros, empurre a plataforma controlando o movimento na descida sem deixar os joelhos dobrarem para dentro.
-                            </p>
-                        </details>
-                    </li>
-
-                    <li>
-                        <details style="padding: 15px; cursor: pointer;">
-                            <summary style="font-size: 18px; font-weight: bold; outline: none;">Elevação Lateral</summary>
-                            <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
-                                <strong>Foco:</strong> Deltoides (ombros - porção lateral).<br>
-                                <strong>Descrição:</strong> Em pé com halteres ao lado do corpo, eleve os braços lateralmente até a altura dos ombros com uma leve flexão nos cotovelos.
-                            </p>
-                        </details>
-                    </li>
-
                 </ul>
             </div>
         </section>
@@ -215,26 +174,6 @@
 
                 <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
                     <ul id="lista-alunos" style="list-style-type: none; padding: 0; margin: 0;">
-                        <li class="item-aluno" data-aluno-id="1" data-aluno-nome="Lucas Silva">
-                            <div class="aluno-selecionavel" onclick="abrirTreinosAluno(1, 'Lucas Silva')">
-                                <strong style="font-size: 17px;">Lucas Silva</strong>
-                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">lucas.silva@email.com • Objetivo: Hipertrofia</div>
-                            </div>
-                        </li>
-
-                        <li class="item-aluno" data-aluno-id="2" data-aluno-nome="Mariana Costa">
-                            <div class="aluno-selecionavel" onclick="abrirTreinosAluno(2, 'Mariana Costa')">
-                                <strong style="font-size: 17px;">Mariana Costa</strong>
-                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">mariana.costa@email.com • Objetivo: Condicionamento</div>
-                            </div>
-                        </li>
-
-                        <li class="item-aluno" data-aluno-id="3" data-aluno-nome="Pedro Henrique">
-                            <div class="aluno-selecionavel" onclick="abrirTreinosAluno(3, 'Pedro Henrique')">
-                                <strong style="font-size: 17px;">Pedro Henrique</strong>
-                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">pedro.henrique@email.com • Objetivo: Emagrecimento</div>
-                            </div>
-                        </li>
                     </ul>
                 </div>
 
@@ -323,6 +262,36 @@
             </div>
         </section>
 
+    <div id="subtela-criar-exercicio" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000;">
+
+        <div style="background: #302828; padding: 22px; border-radius: 8px; width: 90%; max-width: 600px; border: 1px solid #555;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin: 0;">Criar exercício</h3>
+                    <p style="margin-top: 5px; color: #ddd;">Preencha o nome, a máquina utilizada e como fazer</p>
+                </div>
+
+            <button type="button" onclick="fecharSubtelaCriarExercicio()">Fechar</button>
+            </div>
+
+        <hr style="border-color: #555;">
+
+            <form id="form-exercicio" onsubmit="salvarNovoExercicio(event)">
+
+                <input type="text" id="input-nome-exercicio" placeholder="Nome do exercício" required style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;">
+
+                <input type="text" id="input-maquina-exercicio" placeholder="Máquina utilizada" required style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;">
+
+                <textarea id="input-descricao-exercicio" placeholder="Descrição de como fazer o exercício..." required style="width: 100%; box-sizing: border-box; height: 85px; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;"></textarea>
+
+                <button type="submit" style="width: 100%; padding: 12px; margin-top: 5px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                    Salvar exercício
+                </button>
+
+            </form>
+        </div>
+    </div>
     </main>
 
     <!-- Scripts da interface -->
@@ -372,6 +341,135 @@
             }
         }
 
+        
+        async function carregarExercicios() {
+            const lista = document.getElementById("lista-treinos");
+
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/exercicios");
+                const exercicios = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(exercicios.mensagem || "Erro ao carregar exercícios.");
+                }
+
+                lista.innerHTML = "";
+
+                if (exercicios.length === 0) {
+                    lista.innerHTML = `
+                        <li style="padding: 18px; color: #ccc;">
+                            Nenhum exercício cadastrado.
+                        </li>
+                    `;
+                    return;
+                }
+
+                exercicios.forEach(exercicio => {
+                    const item = document.createElement("li");
+                    item.style.borderBottom = "1px solid #444";
+
+                    const detalhes = document.createElement("details");
+                    detalhes.style.padding = "15px";
+                    detalhes.style.cursor = "pointer";
+
+                    const titulo = document.createElement("summary");
+                    titulo.style.fontSize = "18px";
+                    titulo.style.fontWeight = "bold";
+                    titulo.textContent = exercicio.nome;
+
+                    const descricao = document.createElement("p");
+                    descricao.style.marginTop = "10px";
+                    descricao.style.marginBottom = "0";
+                    descricao.style.color = "#ddd";
+                    descricao.style.fontSize = "15px";
+                    descricao.style.lineHeight = "1.5";
+
+                    const maquina = document.createElement("strong");
+                    maquina.textContent = "Máquina utilizada: ";
+
+                    const textoMaquina = document.createTextNode(exercicio.maquina);
+
+                    const quebra = document.createElement("br");
+
+                    const textoDescricao = document.createElement("strong");
+                    textoDescricao.textContent = "Descrição: ";
+
+                    const conteudoDescricao = document.createTextNode(exercicio.descricao);
+
+                    descricao.append(
+                        maquina,
+                        textoMaquina,
+                        quebra,
+                        textoDescricao,
+                        conteudoDescricao
+                    );
+
+                    detalhes.append(titulo, descricao);
+                    item.appendChild(detalhes);
+                    lista.appendChild(item);
+                });
+
+                filtrarTreinos();
+
+            } catch (erro) {
+                console.error("Erro ao carregar exercícios:", erro);
+                lista.innerHTML = `
+                    <li style="padding: 18px; color: #ff7777;">
+                        Não foi possível carregar os exercícios.
+                    </li>
+                `;
+            }
+        }
+
+
+        function abrirSubtelaCriarExercicio() {
+            document.getElementById("form-exercicio").reset();
+            document.getElementById("subtela-criar-exercicio").style.display = "flex";
+        }
+
+        function fecharSubtelaCriarExercicio() {
+            document.getElementById("subtela-criar-exercicio").style.display = "none";
+        }
+
+        async function salvarNovoExercicio(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById("input-nome-exercicio").value.trim();
+            const maquina = document.getElementById("input-maquina-exercicio").value.trim();
+            const descricao = document.getElementById("input-descricao-exercicio").value.trim();
+
+            const dados = new FormData();
+
+            dados.append("nome", nome);
+            dados.append("maquina", maquina);
+            dados.append("descricao", descricao);
+
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/cadastro/exercicio", {
+                    method: "POST",
+                    body: dados
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    alert(resultado.mensagem);
+                    return;
+                }
+
+                await carregarExercicios();
+
+                fecharSubtelaCriarExercicio();
+
+                alert("Exercício cadastrado com sucesso!");
+
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Não foi possível conectar ao servidor.");
+            }
+}
+
+
         function filtrarAlunos() {
             const termo = document.getElementById("campo-pesquisa-alunos").value.toLowerCase();
             const itens = document.querySelectorAll("#lista-alunos .item-aluno");
@@ -386,6 +484,74 @@
 
             document.getElementById("sem-alunos").style.display = visiveis === 0 ? "block" : "none";
         }
+
+        
+        async function carregarAlunos() {
+            const lista = document.getElementById("lista-alunos");
+
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/alunos");
+                const alunos = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(alunos.mensagem || "Erro ao carregar alunos.");
+                }
+
+                lista.innerHTML = "";
+
+                if (alunos.length === 0) {
+                    lista.innerHTML = `
+                        <li style="padding: 18px; color: #ccc;">
+                            Nenhum aluno cadastrado.
+                        </li>
+                    `;
+
+                    document.getElementById("sem-alunos").style.display = "none";
+                    return;
+                }
+
+                alunos.forEach(aluno => {
+                    const item = document.createElement("li");
+                    item.className = "item-aluno";
+                    item.dataset.alunoId = aluno.id_usuario;
+                    item.dataset.alunoNome = aluno.nome;
+
+                    const conteudo = document.createElement("div");
+                    conteudo.className = "aluno-selecionavel";
+
+                    const nome = document.createElement("strong");
+                    nome.style.fontSize = "17px";
+                    nome.textContent = aluno.nome;
+
+                    const email = document.createElement("div");
+                    email.style.color = "#ddd";
+                    email.style.fontSize = "14px";
+                    email.style.marginTop = "4px";
+                    email.textContent = aluno.email;
+
+                    conteudo.append(nome, email);
+
+                    conteudo.onclick = () => {
+                        abrirTreinosAluno(aluno.id_usuario, aluno.nome);
+                    };
+
+                    item.appendChild(conteudo);
+                    lista.appendChild(item);
+                });
+
+                filtrarAlunos();
+
+            } catch (erro) {
+                console.error("Erro ao carregar alunos:", erro);
+
+                lista.innerHTML = `
+                    <li style="padding: 18px; color: #ff7777;">
+                        Não foi possível carregar os alunos.
+                    </li>
+                `;
+            }
+        }
+
 
         function abrirTreinosAluno(idAluno, nomeAluno) {
             alunoAtualId = idAluno;
@@ -444,6 +610,9 @@
             });
             window.location.href = `cadas_treino.html?${params.toString()}`;
         }
+
+        carregarExercicios();
+        carregarAlunos();
     </script>
 </body>
 </html>
