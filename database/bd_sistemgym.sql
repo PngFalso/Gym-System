@@ -31,3 +31,10 @@ CREATE TABLE funcionarios (
     FOREIGN KEY (id_usuario)
         REFERENCES usuarios(id_usuario)
 );
+
+CREATE TABLE exercicios (
+    id_exercicio INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    maquina VARCHAR(100) NOT NULL,
+    descricao TEXT
+);
