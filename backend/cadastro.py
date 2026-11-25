@@ -1,4 +1,3 @@
-
 from flask import Blueprint, request, jsonify
 from database import conectar_banco
 from werkzeug.security import generate_password_hash
