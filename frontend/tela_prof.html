@@ -4,152 +4,69 @@
     <meta charset="UTF-8">
     <title>Painel do Professor</title>
     <style>
-        .agenda-container {
+        /* Estilos da agenda */
+        .item-agenda {
+            border-bottom: 1px solid #444;
+            transition: opacity 0.2s, background-color 0.2s;
+        }
+        .item-agenda:last-child {
+            border-bottom: none;
+        }
+        .item-agenda:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        .item-agenda label {
             display: flex;
-            gap: 24px;
-            align-items: flex-start;
-        }
-        .agenda-painel-esquerdo {
-            flex: 0 0 320px;
-            background-color: rgba(107, 93, 93, 0.25);
-            border-radius: 8px;
-            border: 1px solid #444;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .agenda-painel-direito {
-            flex: 1;
-            min-width: 0;
-            background-color: rgba(107, 93, 93, 0.25);
-            border-radius: 8px;
-            border: 1px solid #444;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .calendario-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-        }
-        .dia-semana {
-            text-align: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: #bbb;
-            padding: 4px 0;
-        }
-        .dia-calendario {
-            min-height: 50px;
-            border-radius: 6px;
-            border: 1px solid #555;
-            padding: 6px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.12s, border-color 0.12s, background-color 0.12s;
-        }
-        .dia-calendario:hover {
-            transform: translateY(-1px);
-            border-color: #fff;
-        }
-        .dia-livre {
-            background-color: rgba(50, 45, 45, 0.8);
-            color: #ccc;
-        }
-        .dia-com-treino {
-            background-color: rgba(40, 167, 69, 0.25);
-            border-color: #28a745;
-            color: #fff;
-        }
-        .dia-selecionado {
-            outline: 2px solid #007bff;
-            border-color: #007bff;
-        }
-        .badge-qtd {
-            font-size: 10px;
-            font-weight: bold;
-            background-color: #28a745;
-            color: #fff;
-            padding: 2px 5px;
-            border-radius: 999px;
-            align-self: flex-start;
-        }
-        .btn-ver-treino {
-            margin-top: 8px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 6px 12px;
-            font-size: 13px;
-            font-weight: bold;
+            align-items: center;
+            padding: 15px 20px;
             cursor: pointer;
         }
-        .btn-ver-treino:hover {
-            background-color: #0069d9;
-        }
-        .btn-agendar-dia {
-            width: 100%;
-            margin-bottom: 14px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 9px 14px;
-            font-size: 14px;
-            font-weight: bold;
+        .check-concluido {
+            width: 20px;
+            height: 20px;
+            accent-color: #28a745;
             cursor: pointer;
         }
-        .btn-agendar-dia:hover {
-            background-color: #218838;
+        .item-agenda:has(.check-concluido:checked) {
+            opacity: 0.45;
+        }
+        .item-agenda:has(.check-concluido:checked) .info-agenda {
+            text-decoration: line-through;
         }
 
-        /* Lista de Alunos Expansível */
-        .lista-alunos {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            background-color: rgba(107, 93, 93, 0.25);
-            border-radius: 8px;
-            border: 1px solid #444;
-            overflow: hidden;
-        }
+        /* Estilos da aba de alunos */
         .item-aluno {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
             border-bottom: 1px solid #444;
+            transition: background-color 0.2s;
         }
         .item-aluno:last-child {
             border-bottom: none;
         }
-        .aluno-cabecalho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
+        .item-aluno:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        .aluno-selecionavel {
             cursor: pointer;
-            transition: background-color 0.12s;
+            flex: 1;
         }
-        .aluno-cabecalho:hover {
-            background-color: rgba(255, 255, 255, 0.04);
-        }
-        .aluno-treino-expandido {
-            display: none;
-            padding: 14px 18px 18px;
-            background-color: rgba(28, 23, 23, 0.72);
-            border-top: 1px solid #444;
-        }
-        .aluno-treino-expandido.aberto {
-            display: block;
+        .aluno-selecionavel:hover strong {
+            color: #4da3ff;
+            text-decoration: underline;
         }
         .btn-criar-treino {
             background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 8px 14px;
             font-size: 14px;
             font-weight: bold;
+            padding: 9px 16px;
+            border-radius: 6px;
             cursor: pointer;
             white-space: nowrap;
         }
@@ -157,137 +74,50 @@
             background-color: #218838;
         }
 
-        /* Subtela (Modal) */
-        .subtela-overlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.72);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            z-index: 1000;
-        }
-        .subtela-overlay.ativa {
-            display: flex;
-        }
-        .subtela-box {
-            background-color: #2b2525;
-            border: 1px solid #555;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 640px;
-            padding: 22px;
-            box-sizing: border-box;
-            color: white;
-        }
-        .subtela-header {
+        /* Estilos dos treinos do aluno */
+        .item-treino-aluno {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
             border-bottom: 1px solid #444;
-            padding-bottom: 12px;
-            margin-bottom: 16px;
         }
-        .btn-fechar-subtela {
-            background-color: rgba(80, 70, 70, 0.9);
-            color: white;
-            border: 1px solid #666;
-            border-radius: 5px;
-            padding: 6px 12px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-fechar-subtela:hover {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-        .tabela-treino {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        .tabela-treino th,
-        .tabela-treino td {
-            border: 1px solid #444;
-            padding: 10px 12px;
-            text-align: left;
-        }
-        .tabela-treino th {
-            background-color: rgba(50, 45, 45, 0.95);
-            color: #4ade80;
-        }
-        .tabela-treino tr:nth-child(even) td {
-            background-color: rgba(40, 35, 35, 0.65);
-        }
-        .input-subtela {
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 14px;
-            padding: 9px 10px;
-            border-radius: 6px;
-            border: 1px solid #555;
-            background-color: rgba(50, 45, 45, 0.85);
-            color: white;
-            margin-bottom: 10px;
-            font-family: sans-serif;
-        }
-
-        /* Combobox junto (pesquisar + selecionar) */
-        .combobox-exercicio {
-            position: relative;
-            margin-bottom: 10px;
-        }
-        .combobox-exercicio .input-subtela {
-            margin-bottom: 0;
-        }
-        .combobox-opcoes {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            margin-top: 2px;
-            background-color: #241e1e;
-            border: 1px solid #666;
-            border-radius: 6px;
-            max-height: 180px;
-            overflow-y: auto;
-            z-index: 1050;
-        }
-        .combobox-opcoes.aberta {
-            display: block;
-        }
-        .combobox-opcao {
-            padding: 9px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            border-bottom: 1px solid #3a3232;
-        }
-        .combobox-opcao:last-child {
+        .item-treino-aluno:last-child {
             border-bottom: none;
         }
-        .combobox-opcao:hover,
-        .combobox-opcao.selecionada {
+        .btn-editar-treino {
             background-color: #007bff;
             color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
         }
-
-        @media (max-width: 780px) {
-            .agenda-container {
-                flex-direction: column;
-            }
-            .agenda-painel-esquerdo {
-                flex: none;
-                width: 100%;
-            }
+        .btn-editar-treino:hover {
+            background-color: #0069d9;
+        }
+        .btn-voltar {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-voltar:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body style="background-color: rgb(34, 27, 27); margin: 0; font-family: sans-serif; color: white;">
 
+    <!-- Cabeçalho e navegação entre abas -->
     <header style="background-color: #2b2525; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444;">
         <nav style="display: flex; gap: 10px;">
             <button onclick="mudarAba('treinos')" id="btn-treinos" style="background: none; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid #007bff;">
@@ -306,7 +136,7 @@
         </div>
     </header>
 
-    <main style="padding: 30px; max-width: 960px; margin: 0 auto;">
+    <main style="padding: 30px; max-width: 900px; margin: 0 auto;">
 
         <!-- Seção Treinos -->
         <section id="aba-treinos" style="display: block;">
@@ -314,185 +144,174 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin: 0;">Gerenciamento de Exercício</h2>
                 
-                <button type="button" onclick="abrirSubtelaCriarExercicio()" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                    Criar Exercício
+                <button onclick="abrirSubtelaCriarExercicio()" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Cadastrar Exercício
                 </button>
             </div>
             
             <input type="text" id="campo-pesquisa" onkeyup="filtrarTreinos()" placeholder="Pesquisar exercício..." style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;">
 
             <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
-                <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;"></ul>
+                <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;">
+                </ul>
             </div>
         </section>
 
         <!-- Seção Alunos -->
         <section id="aba-alunos" style="display: none;">
-            <h2 style="margin-top: 0; margin-bottom: 18px;">Lista de Alunos</h2>
-            <ul class="lista-alunos" id="lista-alunos"></ul>
+            <div id="visao-lista-alunos">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Lista de Alunos</h2>
+                </div>
+
+                <input
+                    type="text"
+                    id="campo-pesquisa-alunos"
+                    onkeyup="filtrarAlunos()"
+                    placeholder="Pesquisar aluno por nome, e-mail ou objetivo..."
+                    style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;"
+                >
+
+                <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                    <ul id="lista-alunos" style="list-style-type: none; padding: 0; margin: 0;">
+                    </ul>
+                </div>
+
+                <p id="sem-alunos" style="display: none; color: #ccc; font-size: 15px; margin-top: 12px;">
+                    Nenhum aluno encontrado.
+                </p>
+            </div>
+
+            <!-- Sub-aba de treinos do aluno escolhido -->
+            <div id="visao-treinos-aluno" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <div>
+                        <button type="button" class="btn-voltar" onclick="voltarParaListaAlunos()" style="margin-bottom: 10px;">
+                            ← Voltar para Alunos
+                        </button>
+                        <h2 id="titulo-treinos-aluno" style="margin: 0;">Treinos do Aluno</h2>
+                    </div>
+
+                    <button type="button" id="btn-novo-treino-aluno" class="btn-criar-treino">
+                        Criar treino
+                    </button>
+                </div>
+
+                <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                    <ul id="lista-treinos-aluno" style="list-style-type: none; padding: 0; margin: 0;"></ul>
+                </div>
+            </div>
         </section>
 
         <!-- Seção Agenda -->
         <section id="aba-agenda" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
-                <h2 style="margin: 0;">Agenda de Horários / Aulas</h2>
+            <h2 style="margin-top: 0; margin-bottom: 20px;">Agenda de Horários / Aulas</h2>
 
-                <div style="display: flex; align-items: center; gap: 14px; font-size: 13px; color: #ddd;">
-                    <span style="display: inline-flex; align-items: center; gap: 6px;">
-                        <span style="width: 12px; height: 12px; border-radius: 3px; background-color: rgba(40, 167, 69, 0.45); border: 1px solid #28a745; display: inline-block;"></span>
-                        Com treino marcado
-                    </span>
-                    <span style="display: inline-flex; align-items: center; gap: 6px;">
-                        <span style="width: 12px; height: 12px; border-radius: 3px; background-color: rgba(50, 45, 45, 0.8); border: 1px solid #555; display: inline-block;"></span>
-                        Sem treino marcado
-                    </span>
-                </div>
-            </div>
+            <!-- Formulário de agendamento -->
+            <form action="/agendamentos" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                <input type="text" name="aluno_nome" placeholder="Nome do Aluno" required style="flex: 2; min-width: 180px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white;">
+                
+                <input type="date" name="data_agendamento" required style="flex: 1; min-width: 140px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; color-scheme: dark;">
+                
+                <input type="time" name="hora_agendamento" required style="flex: 1; min-width: 110px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; color-scheme: dark;">
+                
+                <select name="tipo_atividade" required style="flex: 1; min-width: 160px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white;">
+                    <option value="avaliacao_fisica">Avaliação Física</option>
+                    <option value="montagem_treino">Montagem de Treino</option>
+                    <option value="acompanhamento">Acompanhamento</option>
+                </select>
 
-            <div class="agenda-container">
-                <!-- Lateral Esquerda: Botão Agendar + Alunos, horários e botão para abrir subtela do treino -->
-                <div class="agenda-painel-esquerdo">
-                    <h3 id="titulo-dia-selecionado" style="margin-top: 0; margin-bottom: 12px;">Treinos de hoje</h3>
-                    <button type="button" id="btn-abrir-agendar" class="btn-agendar-dia" onclick="abrirSubtelaAgendar()">
-                        Agendar
-                    </button>
-                    <div id="lista-horarios-dia"></div>
-                </div>
+                <button type="submit" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Agendar
+                </button>
+            </form>
 
-                <!-- Direita: Calendário -->
-                <div class="agenda-painel-direito">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <button type="button" onclick="mudarMes(-1)" style="background-color: rgba(50, 45, 45, 0.9); color: white; border: 1px solid #555; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                            &lt; Anterior
-                        </button>
-                        <h3 id="titulo-mes" style="margin: 0; font-size: 18px; text-transform: capitalize;"></h3>
-                        <button type="button" onclick="mudarMes(1)" style="background-color: rgba(50, 45, 45, 0.9); color: white; border: 1px solid #555; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                            Próximo &gt;
-                        </button>
-                    </div>
+            <!-- Lista de agendamentos -->
+            <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                <ul id="lista-agenda" style="list-style-type: none; padding: 0; margin: 0;">
+                    <li class="item-agenda" data-id="1">
+                        <label>
+                            <div class="info-agenda">
+                                <strong style="font-size: 17px;">20/11/2026 às 08:00 — Lucas Silva</strong>
+                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Avaliação Física</div>
+                            </div>
+                            <input type="checkbox" name="concluido" value="1" class="check-concluido">
+                        </label>
+                    </li>
 
-                    <div class="calendario-grid" id="cabecalho-dias-semana"></div>
-                    <div class="calendario-grid" id="grade-calendario"></div>
-                </div>
+                    <li class="item-agenda" data-id="2">
+                        <label>
+                            <div class="info-agenda">
+                                <strong style="font-size: 17px;">20/11/2026 às 09:30 — Mariana Costa</strong>
+                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Montagem de Treino</div>
+                            </div>
+                            <input type="checkbox" name="concluido" value="2" class="check-concluido">
+                        </label>
+                    </li>
+
+                    <li class="item-agenda" data-id="3">
+                        <label>
+                            <div class="info-agenda">
+                                <strong style="font-size: 17px;">20/11/2026 às 14:00 — Pedro Henrique</strong>
+                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Acompanhamento</div>
+                            </div>
+                            <input type="checkbox" name="concluido" value="3" class="check-concluido">
+                        </label>
+                    </li>
+                </ul>
             </div>
         </section>
 
-    </main>
+    <div id="subtela-criar-exercicio" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000;">
 
-    <!-- Subtela para Agendar Aluno e Treino no Dia -->
-    <div id="subtela-agendar" class="subtela-overlay" onclick="fecharSubtelaAgendarFora(event)">
-        <div class="subtela-box">
-            <div class="subtela-header">
-                <div>
-                    <h3 id="agendar-titulo" style="margin: 0;">Agendar treino</h3>
-                    <div id="agendar-subtitulo" style="color: #bbb; font-size: 13px; margin-top: 4px;">Selecione o aluno e o treino cadastrado para ele</div>
-                </div>
-                <button type="button" class="btn-fechar-subtela" onclick="fecharSubtelaAgendar()">Fechar</button>
-            </div>
-            <form onsubmit="salvarAgendamentoDia(event)">
-                <input type="time" id="input-agendar-horario" class="input-subtela" required style="color-scheme: dark;">
+        <div style="background: #302828; padding: 22px; border-radius: 8px; width: 90%; max-width: 600px; border: 1px solid #555;">
 
-                <!-- Combobox de Aluno -->
-                <div class="combobox-exercicio" id="combobox-agendar-aluno">
-                    <input
-                        type="text"
-                        id="input-combo-agendar-aluno"
-                        class="input-subtela"
-                        placeholder="Pesquisar ou selecionar aluno..."
-                        autocomplete="off"
-                        onfocus="atualizarComboboxAgendarAluno()"
-                        oninput="atualizarComboboxAgendarAluno()"
-                        required
-                    >
-                    <div id="opcoes-combo-agendar-aluno" class="combobox-opcoes"></div>
-                </div>
-
-                <!-- Combobox de Treino do Aluno selecionado -->
-                <div class="combobox-exercicio" id="combobox-agendar-treino">
-                    <input
-                        type="text"
-                        id="input-combo-agendar-treino"
-                        class="input-subtela"
-                        placeholder="Selecione um aluno primeiro..."
-                        autocomplete="off"
-                        disabled
-                        onfocus="atualizarComboboxAgendarTreino()"
-                        oninput="atualizarComboboxAgendarTreino()"
-                        required
-                    >
-                    <div id="opcoes-combo-agendar-treino" class="combobox-opcoes"></div>
-                </div>
-
-                <button type="submit" class="btn-criar-treino" style="width: 100%;">Confirmar agendamento</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Subtela para Criar Exercício -->
-    <div id="subtela-criar-exercicio" class="subtela-overlay" onclick="fecharSubtelaCriarExercicioFora(event)">
-        <div class="subtela-box">
-            <div class="subtela-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h3 style="margin: 0;">Criar exercício</h3>
-                    <div style="color: #bbb; font-size: 13px; margin-top: 4px;">Preencha o nome, a máquina utilizada e como fazer</div>
+                    <p style="margin-top: 5px; color: #ddd;">Preencha o nome, a máquina utilizada e como fazer</p>
                 </div>
-                <button type="button" class="btn-fechar-subtela" onclick="fecharSubtelaCriarExercicio()">Fechar</button>
+
+            <button type="button" onclick="fecharSubtelaCriarExercicio()">Fechar</button>
             </div>
-            <form onsubmit="salvarNovoExercicio(event)">
-                <input type="text" id="input-nome-exercicio" class="input-subtela" placeholder="Nome do exercício (ex: Remada Curvada)" required>
-                <input type="text" id="input-maquina-exercicio" class="input-subtela" placeholder="Máquina utilizada (ex: Barra / Máquina de Remada)" required>
-                <textarea id="input-descricao-exercicio" class="input-subtela" rows="4" placeholder="Descrição de como fazer o exercício..." required style="resize: vertical;"></textarea>
-                <button type="submit" class="btn-criar-treino" style="width: 100%;">Salvar exercício</button>
+
+        <hr style="border-color: #555;">
+
+            <form id="form-exercicio" onsubmit="salvarNovoExercicio(event)">
+
+                <input type="text" id="input-nome-exercicio" placeholder="Nome do exercício" required style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;">
+
+                <input type="text" id="input-maquina-exercicio" placeholder="Máquina utilizada" required style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;">
+
+                <textarea id="input-descricao-exercicio" placeholder="Descrição de como fazer o exercício..." required style="width: 100%; box-sizing: border-box; height: 85px; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;"></textarea>
+
+                <button type="submit" style="width: 100%; padding: 12px; margin-top: 5px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                    Salvar exercício
+                </button>
+
             </form>
         </div>
     </div>
+    </main>
 
-    <!-- Subtela com Exercício, Repetições e Máquina -->
-    <div id="subtela-treino" class="subtela-overlay" onclick="fecharSubtelaFora(event)">
-        <div class="subtela-box">
-            <div class="subtela-header">
-                <div>
-                    <h3 id="subtela-titulo" style="margin: 0;">Treino do Aluno</h3>
-                    <div id="subtela-subtitulo" style="color: #bbb; font-size: 13px; margin-top: 4px;"></div>
-                </div>
-                <button type="button" class="btn-fechar-subtela" onclick="fecharSubtelaTreino()">Fechar</button>
-            </div>
-            <div id="subtela-conteudo"></div>
-        </div>
-    </div>
-
-    <!-- Subtela para Criar Treino de um Aluno -->
-    <div id="subtela-criar-treino" class="subtela-overlay" onclick="fecharSubtelaCriarFora(event)">
-        <div class="subtela-box">
-            <div class="subtela-header">
-                <div>
-                    <h3 id="criar-treino-titulo" style="margin: 0;">Criar treino</h3>
-                    <div style="color: #bbb; font-size: 13px; margin-top: 4px;">Pesquise ou selecione um exercício cadastrado e informe as repetições</div>
-                </div>
-                <button type="button" class="btn-fechar-subtela" onclick="fecharSubtelaCriarTreino()">Fechar</button>
-            </div>
-            <form onsubmit="salvarTreinoAluno(event)">
-                <div class="combobox-exercicio" id="combobox-exercicio">
-                    <input
-                        type="text"
-                        id="input-combo-exercicio"
-                        class="input-subtela"
-                        placeholder="Pesquisar ou selecionar exercício..."
-                        autocomplete="off"
-                        onfocus="abrirComboboxExercicios()"
-                        oninput="atualizarComboboxExercicios()"
-                        required
-                    >
-                    <div id="opcoes-combo-exercicio" class="combobox-opcoes"></div>
-                </div>
-                <input type="text" id="input-repeticoes-aluno" class="input-subtela" placeholder="Repetições (ex: 4x 10)" required>
-                <button type="submit" class="btn-criar-treino" style="width: 100%;">Salvar treino</button>
-            </form>
-            <div id="lista-treinos-criados-aluno" style="margin-top: 14px;"></div>
-        </div>
-    </div>
-
+    <!-- Scripts da interface -->
     <script>
+        const treinosPorAluno = {
+            1: [
+                { id: 10, nome: "Treino A — Peito e Tríceps", detalhes: "4 exercícios • Seg / Qui" },
+                { id: 11, nome: "Treino B — Costas e Bíceps", detalhes: "4 exercícios • Ter / Sex" }
+            ],
+            2: [
+                { id: 20, nome: "Treino Full Body Condicionamento", detalhes: "5 exercícios • Seg / Qua / Sex" }
+            ],
+            3: [
+                { id: 30, nome: "Treino Metabólico A", detalhes: "5 exercícios • Seg / Qua / Sex" }
+            ]
+        };
+
+        let alunoAtualId = null;
+        let alunoAtualNome = "";
+
         function mudarAba(nomeAba) {
             document.getElementById('aba-treinos').style.display = nomeAba === 'treinos' ? 'block' : 'none';
             document.getElementById('aba-alunos').style.display = nomeAba === 'alunos' ? 'block' : 'none';
@@ -506,6 +325,10 @@
 
             document.getElementById('btn-agenda').style.borderColor = nomeAba === 'agenda' ? '#007bff' : 'transparent';
             document.getElementById('btn-agenda').style.color = nomeAba === 'agenda' ? 'white' : '#aaa';
+
+            if (nomeAba === 'alunos') {
+                voltarParaListaAlunos();
+            }
         }
 
         function filtrarTreinos() {
@@ -518,680 +341,278 @@
             }
         }
 
-        const exerciciosCadastrados = [
-            {
-                nome: "Supino Reto com Barra",
-                maquina: "Banco Reto + Barra",
-                descricao: "Deitado no banco reto, segure a barra com uma pegada um pouco mais aberta que a largura dos ombros, desça controlando até o peito e empurre para cima."
-            },
-            {
-                nome: "Puxada Alta",
-                maquina: "Pulley / Cabo Alto",
-                descricao: "Sentado na máquina, puxe a barra em direção à parte superior do peito, mantendo o tronco levemente inclinado para trás e contraindo as costas."
-            },
-            {
-                nome: "Leg Press 45º",
-                maquina: "Leg Press 45º",
-                descricao: "Apoiado no equipamento com os pés na largura dos ombros, empurre a plataforma controlando o movimento na descida sem deixar os joelhos dobrarem para dentro."
-            },
-            {
-                nome: "Elevação Lateral",
-                maquina: "Halteres",
-                descricao: "Em pé com halteres ao lado do corpo, eleve os braços lateralmente até a altura dos ombros com uma leve flexão nos cotovelos."
-            }
-        ];
-
-        let indiceExercicioSelecionado = null;
-
-        function renderizarListaExercicios() {
+        
+        async function carregarExercicios() {
             const lista = document.getElementById("lista-treinos");
-            lista.innerHTML = exerciciosCadastrados.map((ex, idx) => `
-                <li style="border-bottom: ${idx < exerciciosCadastrados.length - 1 ? "1px solid #444" : "none"};">
-                    <details style="padding: 15px; cursor: pointer;">
-                        <summary style="font-size: 18px; font-weight: bold; outline: none;">${ex.nome}</summary>
-                        <p style="margin-top: 10px; margin-bottom: 0; color: #ddd; font-size: 15px; line-height: 1.5;">
-                            <strong>Máquina:</strong> ${ex.maquina}<br>
-                            <strong>Descrição:</strong> ${ex.descricao}
-                        </p>
-                    </details>
-                </li>
-            `).join("");
-        }
 
-        function abrirComboboxExercicios() {
-            atualizarComboboxExercicios();
-        }
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/exercicios");
+                const exercicios = await resposta.json();
 
-        function fecharComboboxExercicios() {
-            const opcoesEl = document.getElementById("opcoes-combo-exercicio");
-            if (opcoesEl) {
-                opcoesEl.classList.remove("aberta");
+                if (!resposta.ok) {
+                    throw new Error(exercicios.mensagem || "Erro ao carregar exercícios.");
+                }
+
+                lista.innerHTML = "";
+
+                if (exercicios.length === 0) {
+                    lista.innerHTML = `
+                        <li style="padding: 18px; color: #ccc;">
+                            Nenhum exercício cadastrado.
+                        </li>
+                    `;
+                    return;
+                }
+
+                exercicios.forEach(exercicio => {
+                    const item = document.createElement("li");
+                    item.style.borderBottom = "1px solid #444";
+
+                    const detalhes = document.createElement("details");
+                    detalhes.style.padding = "15px";
+                    detalhes.style.cursor = "pointer";
+
+                    const titulo = document.createElement("summary");
+                    titulo.style.fontSize = "18px";
+                    titulo.style.fontWeight = "bold";
+                    titulo.textContent = exercicio.nome;
+
+                    const descricao = document.createElement("p");
+                    descricao.style.marginTop = "10px";
+                    descricao.style.marginBottom = "0";
+                    descricao.style.color = "#ddd";
+                    descricao.style.fontSize = "15px";
+                    descricao.style.lineHeight = "1.5";
+
+                    const maquina = document.createElement("strong");
+                    maquina.textContent = "Máquina utilizada: ";
+
+                    const textoMaquina = document.createTextNode(exercicio.maquina);
+
+                    const quebra = document.createElement("br");
+
+                    const textoDescricao = document.createElement("strong");
+                    textoDescricao.textContent = "Descrição: ";
+
+                    const conteudoDescricao = document.createTextNode(exercicio.descricao);
+
+                    descricao.append(
+                        maquina,
+                        textoMaquina,
+                        quebra,
+                        textoDescricao,
+                        conteudoDescricao
+                    );
+
+                    detalhes.append(titulo, descricao);
+                    item.appendChild(detalhes);
+                    lista.appendChild(item);
+                });
+
+                filtrarTreinos();
+
+            } catch (erro) {
+                console.error("Erro ao carregar exercícios:", erro);
+                lista.innerHTML = `
+                    <li style="padding: 18px; color: #ff7777;">
+                        Não foi possível carregar os exercícios.
+                    </li>
+                `;
             }
         }
 
-        function selecionarOpcaoCombobox(idx) {
-            const ex = exerciciosCadastrados[idx];
-            if (!ex) return;
-            indiceExercicioSelecionado = idx;
-            document.getElementById("input-combo-exercicio").value = ex.nome;
-            fecharComboboxExercicios();
-        }
-
-        function atualizarComboboxExercicios() {
-            const inputEl = document.getElementById("input-combo-exercicio");
-            const opcoesEl = document.getElementById("opcoes-combo-exercicio");
-            if (!inputEl || !opcoesEl) return;
-
-            const textoAtual = inputEl.value.trim().toLowerCase();
-
-            if (
-                indiceExercicioSelecionado !== null &&
-                exerciciosCadastrados[indiceExercicioSelecionado] &&
-                exerciciosCadastrados[indiceExercicioSelecionado].nome.toLowerCase() !== textoAtual
-            ) {
-                indiceExercicioSelecionado = null;
-            }
-
-            const correspondentes = exerciciosCadastrados
-                .map((ex, idx) => ({ ex, idx }))
-                .filter(({ ex }) => !textoAtual || ex.nome.toLowerCase().includes(textoAtual));
-
-            if (correspondentes.length === 0) {
-                opcoesEl.innerHTML = "";
-                opcoesEl.classList.remove("aberta");
-                return;
-            }
-
-            opcoesEl.innerHTML = correspondentes
-                .map(({ ex, idx }) => `
-                    <div
-                        class="combobox-opcao ${indiceExercicioSelecionado === idx ? "selecionada" : ""}"
-                        onmousedown="event.preventDefault(); selecionarOpcaoCombobox(${idx})"
-                    >
-                        <strong>${ex.nome}</strong> <span style="color: #bbb; font-size: 12px;">(${ex.maquina})</span>
-                    </div>
-                `)
-                .join("");
-
-            opcoesEl.classList.add("aberta");
-        }
-
-        document.addEventListener("click", function (event) {
-            const combo = document.getElementById("combobox-exercicio");
-            if (combo && !combo.contains(event.target)) {
-                fecharComboboxExercicios();
-            }
-            const comboAluno = document.getElementById("combobox-agendar-aluno");
-            if (comboAluno && !comboAluno.contains(event.target)) {
-                fecharComboboxAgendarAluno();
-            }
-            const comboTreino = document.getElementById("combobox-agendar-treino");
-            if (comboTreino && !comboTreino.contains(event.target)) {
-                fecharComboboxAgendarTreino();
-            }
-        });
 
         function abrirSubtelaCriarExercicio() {
-            document.getElementById("input-nome-exercicio").value = "";
-            document.getElementById("input-maquina-exercicio").value = "";
-            document.getElementById("input-descricao-exercicio").value = "";
-            document.getElementById("subtela-criar-exercicio").classList.add("ativa");
+            document.getElementById("form-exercicio").reset();
+            document.getElementById("subtela-criar-exercicio").style.display = "flex";
         }
 
         function fecharSubtelaCriarExercicio() {
-            document.getElementById("subtela-criar-exercicio").classList.remove("ativa");
+            document.getElementById("subtela-criar-exercicio").style.display = "none";
         }
 
-        function fecharSubtelaCriarExercicioFora(event) {
-            if (event.target.id === "subtela-criar-exercicio") {
-                fecharSubtelaCriarExercicio();
-            }
-        }
-
-        function salvarNovoExercicio(event) {
+        async function salvarNovoExercicio(event) {
             event.preventDefault();
+
             const nome = document.getElementById("input-nome-exercicio").value.trim();
             const maquina = document.getElementById("input-maquina-exercicio").value.trim();
             const descricao = document.getElementById("input-descricao-exercicio").value.trim();
 
-            if (!nome || !maquina || !descricao) return;
+            const dados = new FormData();
 
-            exerciciosCadastrados.push({ nome, maquina, descricao });
-            renderizarListaExercicios();
-            filtrarTreinos();
-            fecharSubtelaCriarExercicio();
-        }
+            dados.append("nome", nome);
+            dados.append("maquina", maquina);
+            dados.append("descricao", descricao);
 
-        const alunosCadastrados = ["Lucas Silva", "Mariana Costa", "Pedro Henrique"];
-        const treinosPorAluno = {
-            "Lucas Silva": [
-                { nome: "Supino Reto com Barra", repeticoes: "4x 10", maquina: "Banco Reto + Barra" },
-                { nome: "Elevação Lateral", repeticoes: "3x 15", maquina: "Halteres" }
-            ],
-            "Mariana Costa": [
-                { nome: "Puxada Alta", repeticoes: "4x 12", maquina: "Pulley / Cabo Alto" }
-            ],
-            "Pedro Henrique": [
-                { nome: "Leg Press 45º", repeticoes: "4x 12", maquina: "Leg Press 45º" }
-            ]
-        };
-        let alunoEmCriacao = "";
-        let alunoExpandido = "";
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/cadastro/exercicio", {
+                    method: "POST",
+                    body: dados
+                });
 
-        function montarTabelaExercicios(exercicios) {
-            if (!exercicios || exercicios.length === 0) {
-                return `<p style="color: #bbb; font-size: 13px; margin: 0;">Nenhum treino cadastrado para este aluno ainda.</p>`;
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    alert(resultado.mensagem);
+                    return;
+                }
+
+                await carregarExercicios();
+
+                fecharSubtelaCriarExercicio();
+
+                alert("Exercício cadastrado com sucesso!");
+
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Não foi possível conectar ao servidor.");
             }
-            return `
-                <table class="tabela-treino">
-                    <thead>
-                        <tr>
-                            <th>Exercício</th>
-                            <th>Repetições</th>
-                            <th>Máquina</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${exercicios.map(ex => `
-                            <tr>
-                                <td><strong>${ex.nome}</strong></td>
-                                <td>${ex.repeticoes}</td>
-                                <td>${ex.maquina}</td>
-                            </tr>
-                        `).join("")}
-                    </tbody>
-                </table>
-            `;
+}
+
+
+        function filtrarAlunos() {
+            const termo = document.getElementById("campo-pesquisa-alunos").value.toLowerCase();
+            const itens = document.querySelectorAll("#lista-alunos .item-aluno");
+            let visiveis = 0;
+
+            for (let item of itens) {
+                const texto = item.textContent || item.innerText;
+                const corresponde = texto.toLowerCase().includes(termo);
+                item.style.display = corresponde ? "" : "none";
+                if (corresponde) visiveis++;
+            }
+
+            document.getElementById("sem-alunos").style.display = visiveis === 0 ? "block" : "none";
         }
 
-        function alternarExpandirAluno(nomeAluno) {
-            alunoExpandido = alunoExpandido === nomeAluno ? "" : nomeAluno;
-            renderizarListaAlunos();
-        }
-
-        function renderizarListaAlunos() {
+        
+        async function carregarAlunos() {
             const lista = document.getElementById("lista-alunos");
-            lista.innerHTML = alunosCadastrados.map((nome, idx) => {
-                const aberto = alunoExpandido === nome;
-                const exercicios = treinosPorAluno[nome] || [];
-                return `
-                    <li class="item-aluno" id="aluno-item-${idx}">
-                        <div class="aluno-cabecalho" onclick="alternarExpandirAluno('${nome.replace(/'/g, "\\'")}')">
-                            <span style="font-size: 16px; font-weight: bold;">${nome} ${aberto ? "▾" : "▸"}</span>
-                            <button type="button" class="btn-criar-treino" onclick="event.stopPropagation(); abrirSubtelaCriarTreino('${nome.replace(/'/g, "\\'")}')">
-                                Criar treino
-                            </button>
-                        </div>
-                        <div class="aluno-treino-expandido ${aberto ? "aberto" : ""}">
-                            ${montarTabelaExercicios(exercicios)}
-                        </div>
+
+            try {
+                const resposta = await fetch("http://127.0.0.1:5000/alunos");
+                const alunos = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(alunos.mensagem || "Erro ao carregar alunos.");
+                }
+
+                lista.innerHTML = "";
+
+                if (alunos.length === 0) {
+                    lista.innerHTML = `
+                        <li style="padding: 18px; color: #ccc;">
+                            Nenhum aluno cadastrado.
+                        </li>
+                    `;
+
+                    document.getElementById("sem-alunos").style.display = "none";
+                    return;
+                }
+
+                alunos.forEach(aluno => {
+                    const item = document.createElement("li");
+                    item.className = "item-aluno";
+                    item.dataset.alunoId = aluno.id_usuario;
+                    item.dataset.alunoNome = aluno.nome;
+
+                    const conteudo = document.createElement("div");
+                    conteudo.className = "aluno-selecionavel";
+
+                    const nome = document.createElement("strong");
+                    nome.style.fontSize = "17px";
+                    nome.textContent = aluno.nome;
+
+                    const email = document.createElement("div");
+                    email.style.color = "#ddd";
+                    email.style.fontSize = "14px";
+                    email.style.marginTop = "4px";
+                    email.textContent = aluno.email;
+
+                    conteudo.append(nome, email);
+
+                    conteudo.onclick = () => {
+                        abrirTreinosAluno(aluno.id_usuario, aluno.nome);
+                    };
+
+                    item.appendChild(conteudo);
+                    lista.appendChild(item);
+                });
+
+                filtrarAlunos();
+
+            } catch (erro) {
+                console.error("Erro ao carregar alunos:", erro);
+
+                lista.innerHTML = `
+                    <li style="padding: 18px; color: #ff7777;">
+                        Não foi possível carregar os alunos.
                     </li>
                 `;
-            }).join("");
-        }
-
-        function abrirSubtelaCriarTreino(nomeAluno) {
-            alunoEmCriacao = nomeAluno;
-            indiceExercicioSelecionado = null;
-            document.getElementById("criar-treino-titulo").textContent = `Criar treino — ${nomeAluno}`;
-            document.getElementById("input-combo-exercicio").value = "";
-            fecharComboboxExercicios();
-            document.getElementById("input-repeticoes-aluno").value = "";
-            renderizarTreinosDoAluno();
-            document.getElementById("subtela-criar-treino").classList.add("ativa");
-        }
-
-        function fecharSubtelaCriarTreino() {
-            fecharComboboxExercicios();
-            document.getElementById("subtela-criar-treino").classList.remove("ativa");
-        }
-
-        function fecharSubtelaCriarFora(event) {
-            if (event.target.id === "subtela-criar-treino") {
-                fecharSubtelaCriarTreino();
             }
         }
 
-        function salvarTreinoAluno(event) {
-            event.preventDefault();
-            if (!alunoEmCriacao) return;
 
-            const textoDigitado = document.getElementById("input-combo-exercicio").value.trim().toLowerCase();
-            let exercicioSelecionado =
-                indiceExercicioSelecionado !== null ? exerciciosCadastrados[indiceExercicioSelecionado] : null;
+        function abrirTreinosAluno(idAluno, nomeAluno) {
+            alunoAtualId = idAluno;
+            alunoAtualNome = nomeAluno;
 
-            if (!exercicioSelecionado && textoDigitado) {
-                exercicioSelecionado = exerciciosCadastrados.find(
-                    ex => ex.nome.toLowerCase() === textoDigitado
-                ) || null;
-            }
+            document.getElementById("visao-lista-alunos").style.display = "none";
+            document.getElementById("visao-treinos-aluno").style.display = "block";
+            document.getElementById("titulo-treinos-aluno").textContent = `Treinos de ${nomeAluno}`;
+            document.getElementById("btn-novo-treino-aluno").onclick = () => criarTreinoAluno(idAluno, nomeAluno);
 
-            const repeticoes = document.getElementById("input-repeticoes-aluno").value.trim();
+            const lista = document.getElementById("lista-treinos-aluno");
+            lista.innerHTML = "";
 
-            if (!exercicioSelecionado || !repeticoes) return;
+            const treinos = treinosPorAluno[idAluno] || [];
 
-            if (!treinosPorAluno[alunoEmCriacao]) {
-                treinosPorAluno[alunoEmCriacao] = [];
-            }
-            treinosPorAluno[alunoEmCriacao].push({
-                nome: exercicioSelecionado.nome,
-                repeticoes,
-                maquina: exercicioSelecionado.maquina
-            });
-
-            indiceExercicioSelecionado = null;
-            document.getElementById("input-combo-exercicio").value = "";
-            fecharComboboxExercicios();
-            document.getElementById("input-repeticoes-aluno").value = "";
-
-            renderizarTreinosDoAluno();
-            if (alunoExpandido === alunoEmCriacao) {
-                renderizarListaAlunos();
-            }
-        }
-
-        function renderizarTreinosDoAluno() {
-            const container = document.getElementById("lista-treinos-criados-aluno");
-            const itens = treinosPorAluno[alunoEmCriacao] || [];
-
-            if (itens.length === 0) {
-                container.innerHTML = `<p style="color: #bbb; font-size: 13px; margin: 0;">Nenhum exercício adicionado ainda para ${alunoEmCriacao}.</p>`;
+            if (treinos.length === 0) {
+                lista.innerHTML = `<li style="padding: 18px 20px; color: #ccc;">Nenhum treino cadastrado para este aluno ainda.</li>`;
                 return;
             }
 
-            container.innerHTML = montarTabelaExercicios(itens);
-        }
-
-        const agendamentosPorData = {
-            "2026-11-24": [
-                {
-                    hora: "08:00",
-                    aluno: "Lucas Silva",
-                    exercicios: [
-                        { nome: "Supino Reto com Barra", repeticoes: "4x 10", maquina: "Banco Reto + Barra" },
-                        { nome: "Elevação Lateral", repeticoes: "3x 15", maquina: "Halteres" }
-                    ]
-                },
-                {
-                    hora: "10:00",
-                    aluno: "Mariana Costa",
-                    exercicios: [
-                        { nome: "Puxada Alta", repeticoes: "4x 12", maquina: "Pulley / Cabo Alto" }
-                    ]
-                }
-            ],
-            "2026-11-26": [
-                {
-                    hora: "14:30",
-                    aluno: "Pedro Henrique",
-                    exercicios: [
-                        { nome: "Leg Press 45º", repeticoes: "4x 12", maquina: "Leg Press 45º" }
-                    ]
-                }
-            ]
-        };
-
-        let dataAtual = new Date();
-        const chaveHoje = formatarChaveData(
-            dataAtual.getFullYear(),
-            dataAtual.getMonth(),
-            dataAtual.getDate()
-        );
-        let mesExibido = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
-        let diaSelecionadoChave = chaveHoje;
-
-        // Estado da subtela Agendar
-        let alunoAgendarSelecionado = null;
-        let indiceTreinoAgendarSelecionado = null;
-
-        function formatarChaveData(ano, mesIndice, dia) {
-            const m = String(mesIndice + 1).padStart(2, '0');
-            const d = String(dia).padStart(2, '0');
-            return `${ano}-${m}-${d}`;
-        }
-
-        function formatarDataBR(chave) {
-            const [ano, mes, dia] = chave.split('-');
-            return `${dia}/${mes}/${ano}`;
-        }
-
-        function renderizarCabecalhoSemana() {
-            const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-            const cabecalho = document.getElementById("cabecalho-dias-semana");
-            cabecalho.innerHTML = dias.map(d => `<div class="dia-semana">${d}</div>`).join("");
-        }
-
-        function mudarMes(delta) {
-            mesExibido = new Date(mesExibido.getFullYear(), mesExibido.getMonth() + delta, 1);
-            renderizarCalendario();
-        }
-
-        function selecionarDia(chave) {
-            diaSelecionadoChave = chave;
-            renderizarCalendario();
-            renderizarDetalhesDia();
-        }
-
-        function abrirSubtelaAgendar() {
-            if (!diaSelecionadoChave) return;
-
-            alunoAgendarSelecionado = null;
-            indiceTreinoAgendarSelecionado = null;
-
-            document.getElementById("agendar-titulo").textContent = `Agendar — ${formatarDataBR(diaSelecionadoChave)}`;
-            document.getElementById("input-agendar-horario").value = "09:00";
-
-            const inputAluno = document.getElementById("input-combo-agendar-aluno");
-            inputAluno.value = "";
-            fecharComboboxAgendarAluno();
-
-            const inputTreino = document.getElementById("input-combo-agendar-treino");
-            inputTreino.value = "";
-            inputTreino.disabled = true;
-            inputTreino.placeholder = "Selecione um aluno primeiro...";
-            fecharComboboxAgendarTreino();
-
-            document.getElementById("subtela-agendar").classList.add("ativa");
-        }
-
-        function fecharSubtelaAgendar() {
-            fecharComboboxAgendarAluno();
-            fecharComboboxAgendarTreino();
-            document.getElementById("subtela-agendar").classList.remove("ativa");
-        }
-
-        function fecharSubtelaAgendarFora(event) {
-            if (event.target.id === "subtela-agendar") {
-                fecharSubtelaAgendar();
-            }
-        }
-
-        function fecharComboboxAgendarAluno() {
-            const opcoesEl = document.getElementById("opcoes-combo-agendar-aluno");
-            if (opcoesEl) opcoesEl.classList.remove("aberta");
-        }
-
-        function selecionarOpcaoAgendarAluno(nomeAluno) {
-            alunoAgendarSelecionado = nomeAluno;
-            indiceTreinoAgendarSelecionado = null;
-
-            document.getElementById("input-combo-agendar-aluno").value = nomeAluno;
-            fecharComboboxAgendarAluno();
-
-            const inputTreino = document.getElementById("input-combo-agendar-treino");
-            const treinosAluno = treinosPorAluno[nomeAluno] || [];
-
-            inputTreino.value = "";
-            if (treinosAluno.length === 0) {
-                inputTreino.disabled = true;
-                inputTreino.placeholder = "Este aluno não possui treinos cadastrados";
-                fecharComboboxAgendarTreino();
-            } else {
-                inputTreino.disabled = false;
-                inputTreino.placeholder = "Pesquisar ou selecionar treino do aluno...";
-                atualizarComboboxAgendarTreino();
-            }
-        }
-
-        function atualizarComboboxAgendarAluno() {
-            const inputEl = document.getElementById("input-combo-agendar-aluno");
-            const opcoesEl = document.getElementById("opcoes-combo-agendar-aluno");
-            if (!inputEl || !opcoesEl) return;
-
-            const termo = inputEl.value.trim().toLowerCase();
-
-            if (alunoAgendarSelecionado && alunoAgendarSelecionado.toLowerCase() !== termo) {
-                alunoAgendarSelecionado = null;
-                indiceTreinoAgendarSelecionado = null;
-
-                const inputTreino = document.getElementById("input-combo-agendar-treino");
-                inputTreino.value = "";
-                inputTreino.disabled = true;
-                inputTreino.placeholder = "Selecione um aluno primeiro...";
-                fecharComboboxAgendarTreino();
-            }
-
-            const correspondentes = alunosCadastrados.filter(
-                nome => !termo || nome.toLowerCase().includes(termo)
-            );
-
-            if (correspondentes.length === 0) {
-                opcoesEl.innerHTML = "";
-                opcoesEl.classList.remove("aberta");
-                return;
-            }
-
-            opcoesEl.innerHTML = correspondentes
-                .map(nome => `
-                    <div
-                        class="combobox-opcao ${alunoAgendarSelecionado === nome ? "selecionada" : ""}"
-                        onmousedown="event.preventDefault(); selecionarOpcaoAgendarAluno('${nome.replace(/'/g, "\\'")}')"
-                    >
-                        <strong>${nome}</strong>
+            treinos.forEach((treino) => {
+                const item = document.createElement("li");
+                item.className = "item-treino-aluno";
+                item.innerHTML = `
+                    <div>
+                        <strong style="font-size: 17px;">${treino.nome}</strong>
+                        <div style="color: #ddd; font-size: 14px; margin-top: 4px;">${treino.detalhes}</div>
                     </div>
-                `)
-                .join("");
-
-            opcoesEl.classList.add("aberta");
-        }
-
-        function fecharComboboxAgendarTreino() {
-            const opcoesEl = document.getElementById("opcoes-combo-agendar-treino");
-            if (opcoesEl) opcoesEl.classList.remove("aberta");
-        }
-
-        function selecionarOpcaoAgendarTreino(idx) {
-            if (!alunoAgendarSelecionado) return;
-            const treinosAluno = treinosPorAluno[alunoAgendarSelecionado] || [];
-            const treino = treinosAluno[idx];
-            if (!treino) return;
-
-            indiceTreinoAgendarSelecionado = idx;
-            document.getElementById("input-combo-agendar-treino").value = treino.nome;
-            fecharComboboxAgendarTreino();
-        }
-
-        function atualizarComboboxAgendarTreino() {
-            const inputEl = document.getElementById("input-combo-agendar-treino");
-            const opcoesEl = document.getElementById("opcoes-combo-agendar-treino");
-            if (!inputEl || !opcoesEl || !alunoAgendarSelecionado) return;
-
-            const treinosAluno = treinosPorAluno[alunoAgendarSelecionado] || [];
-            const termo = inputEl.value.trim().toLowerCase();
-
-            if (
-                indiceTreinoAgendarSelecionado !== null &&
-                treinosAluno[indiceTreinoAgendarSelecionado] &&
-                treinosAluno[indiceTreinoAgendarSelecionado].nome.toLowerCase() !== termo
-            ) {
-                indiceTreinoAgendarSelecionado = null;
-            }
-
-            const correspondentes = treinosAluno
-                .map((tr, idx) => ({ tr, idx }))
-                .filter(({ tr }) => !termo || tr.nome.toLowerCase().includes(termo));
-
-            if (correspondentes.length === 0) {
-                opcoesEl.innerHTML = "";
-                opcoesEl.classList.remove("aberta");
-                return;
-            }
-
-            opcoesEl.innerHTML = correspondentes
-                .map(({ tr, idx }) => `
-                    <div
-                        class="combobox-opcao ${indiceTreinoAgendarSelecionado === idx ? "selecionada" : ""}"
-                        onmousedown="event.preventDefault(); selecionarOpcaoAgendarTreino(${idx})"
-                    >
-                        <strong>${tr.nome}</strong> <span style="color: #bbb; font-size: 12px;">(${tr.repeticoes} • ${tr.maquina})</span>
-                    </div>
-                `)
-                .join("");
-
-            opcoesEl.classList.add("aberta");
-        }
-
-        function salvarAgendamentoDia(event) {
-            event.preventDefault();
-            if (!diaSelecionadoChave) return;
-
-            const hora = document.getElementById("input-agendar-horario").value;
-            const textoAluno = document.getElementById("input-combo-agendar-aluno").value.trim().toLowerCase();
-
-            let nomeAlunoValido = alunoAgendarSelecionado;
-            if (!nomeAlunoValido && textoAluno) {
-                nomeAlunoValido = alunosCadastrados.find(n => n.toLowerCase() === textoAluno) || null;
-            }
-            if (!nomeAlunoValido || !hora) return;
-
-            const treinosAluno = treinosPorAluno[nomeAlunoValido] || [];
-            const textoTreino = document.getElementById("input-combo-agendar-treino").value.trim().toLowerCase();
-
-            let treinoValido =
-                indiceTreinoAgendarSelecionado !== null ? treinosAluno[indiceTreinoAgendarSelecionado] : null;
-            if (!treinoValido && textoTreino) {
-                treinoValido = treinosAluno.find(t => t.nome.toLowerCase() === textoTreino) || null;
-            }
-            if (!treinoValido) return;
-
-            if (!agendamentosPorData[diaSelecionadoChave]) {
-                agendamentosPorData[diaSelecionadoChave] = [];
-            }
-
-            agendamentosPorData[diaSelecionadoChave].push({
-                hora,
-                aluno: nomeAlunoValido,
-                exercicios: [
-                    {
-                        nome: treinoValido.nome,
-                        repeticoes: treinoValido.repeticoes,
-                        maquina: treinoValido.maquina
-                    }
-                ]
-            });
-
-            fecharSubtelaAgendar();
-            renderizarCalendario();
-            renderizarDetalhesDia();
-        }
-
-        function abrirSubtelaTreino(chaveData, hora, indiceAula) {
-            const listaDia = agendamentosPorData[chaveData] || [];
-            const aulasOrdenadas = listaDia.slice().sort((a, b) => a.hora.localeCompare(b.hora));
-            const aula = aulasOrdenadas[indiceAula];
-            if (!aula) return;
-
-            document.getElementById("subtela-titulo").textContent = `Treino de ${aula.aluno}`;
-            document.getElementById("subtela-subtitulo").textContent = `Data: ${formatarDataBR(chaveData)} • Horário: ${aula.hora}`;
-
-            const exercicios = aula.exercicios || [];
-            const conteudo = document.getElementById("subtela-conteudo");
-
-            if (exercicios.length === 0) {
-                conteudo.innerHTML = `<p style="color: #ccc; margin: 0;">Nenhum exercício cadastrado para este atendimento.</p>`;
-            } else {
-                conteudo.innerHTML = montarTabelaExercicios(exercicios);
-            }
-
-            document.getElementById("subtela-treino").classList.add("ativa");
-        }
-
-        function fecharSubtelaTreino() {
-            document.getElementById("subtela-treino").classList.remove("ativa");
-        }
-
-        function fecharSubtelaFora(event) {
-            if (event.target.id === "subtela-treino") {
-                fecharSubtelaTreino();
-            }
-        }
-
-        function renderizarCalendario() {
-            const ano = mesExibido.getFullYear();
-            const mes = mesExibido.getMonth();
-
-            const nomeMes = mesExibido.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
-            document.getElementById("titulo-mes").textContent = nomeMes;
-
-            const primeiroDiaSemana = new Date(ano, mes, 1).getDay();
-            const totalDiasMes = new Date(ano, mes + 1, 0).getDate();
-
-            const grade = document.getElementById("grade-calendario");
-            grade.innerHTML = "";
-
-            for (let i = 0; i < primeiroDiaSemana; i++) {
-                const vazio = document.createElement("div");
-                grade.appendChild(vazio);
-            }
-
-            for (let dia = 1; dia <= totalDiasMes; dia++) {
-                const chave = formatarChaveData(ano, mes, dia);
-                const aulasDoDia = agendamentosPorData[chave] || [];
-                const temTreino = aulasDoDia.length > 0;
-
-                const btnDia = document.createElement("div");
-                btnDia.className = `dia-calendario ${temTreino ? "dia-com-treino" : "dia-livre"} ${chave === diaSelecionadoChave ? "dia-selecionado" : ""}`;
-                btnDia.onclick = () => selecionarDia(chave);
-
-                btnDia.innerHTML = `
-                    <span style="font-weight: bold; font-size: 14px;">${dia}</span>
-                    ${temTreino ? `<span class="badge-qtd">${aulasDoDia.length} ${aulasDoDia.length === 1 ? "treino" : "treinos"}</span>` : `<span style="font-size: 10px; color: #888;">Livre</span>`}
+                    <button type="button" class="btn-editar-treino" onclick="editarTreinoAluno(${treino.id}, '${treino.nome.replace(/'/g, "\\'")}')">
+                        Editar treino
+                    </button>
                 `;
-
-                grade.appendChild(btnDia);
-            }
+                lista.appendChild(item);
+            });
         }
 
-        function renderizarDetalhesDia() {
-            const titulo = document.getElementById("titulo-dia-selecionado");
-            const container = document.getElementById("lista-horarios-dia");
-            const btnAgendar = document.getElementById("btn-abrir-agendar");
-
-            if (!diaSelecionadoChave) {
-                titulo.textContent = "Selecione um dia no calendário";
-                if (btnAgendar) btnAgendar.style.display = "none";
-                container.innerHTML = "";
-                return;
-            }
-
-            if (btnAgendar) btnAgendar.style.display = "block";
-
-            const ehHoje = diaSelecionadoChave === chaveHoje;
-            titulo.textContent = ehHoje
-                ? `Treinos de hoje (${formatarDataBR(diaSelecionadoChave)})`
-                : `Treinos em ${formatarDataBR(diaSelecionadoChave)}`;
-
-            const aulas = (agendamentosPorData[diaSelecionadoChave] || [])
-                .slice()
-                .sort((a, b) => a.hora.localeCompare(b.hora));
-
-            if (aulas.length === 0) {
-                container.innerHTML = `<p style="color: #bbb; margin: 0; font-size: 14px;">${ehHoje ? "Nenhum treino marcado para hoje." : "Nenhum treino marcado neste dia."}</p>`;
-                return;
-            }
-
-            container.innerHTML = `
-                <ul style="list-style: none; padding: 0; margin: 0; border: 1px solid #444; border-radius: 6px; overflow: hidden;">
-                    ${aulas.map((item, idx) => `
-                        <li style="padding: 12px; border-bottom: 1px solid #444; background-color: rgba(40, 35, 35, 0.7);">
-                            <div>
-                                <strong style="color: #4ade80; font-size: 14px;">${item.hora}</strong>
-                                <strong style="font-size: 15px; margin-left: 6px;">— ${item.aluno}</strong>
-                            </div>
-                            <button type="button" class="btn-ver-treino" onclick="abrirSubtelaTreino('${diaSelecionadoChave}', '${item.hora}', ${idx})">
-                                Ver treino
-                            </button>
-                        </li>
-                    `).join("")}
-                </ul>
-            `;
+        function voltarParaListaAlunos() {
+            document.getElementById("visao-treinos-aluno").style.display = "none";
+            document.getElementById("visao-lista-alunos").style.display = "block";
         }
 
-        renderizarListaExercicios();
-        renderizarListaAlunos();
-        renderizarCabecalhoSemana();
-        renderizarCalendario();
-        renderizarDetalhesDia();
+        function criarTreinoAluno(idAluno, nomeAluno) {
+            const params = new URLSearchParams({
+                aluno_id: idAluno,
+                aluno_nome: nomeAluno
+            });
+            window.location.href = `cadas_treino.html?${params.toString()}`;
+        }
+
+        function editarTreinoAluno(idTreino, nomeTreino) {
+            const params = new URLSearchParams({
+                aluno_id: alunoAtualId,
+                aluno_nome: alunoAtualNome,
+                treino_id: idTreino,
+                treino_nome: nomeTreino
+            });
+            window.location.href = `cadas_treino.html?${params.toString()}`;
+        }
+
+        carregarExercicios();
+        carregarAlunos();
     </script>
 </body>
 </html>
