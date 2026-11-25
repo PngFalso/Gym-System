@@ -32,9 +32,20 @@ CREATE TABLE funcionarios (
         REFERENCES usuarios(id_usuario)
 );
 
-CREATE TABLE exercicios (
-    id_exercicio INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE treinos (
+    id_treino INT AUTO_INCREMENT PRIMARY KEY,
+    id_aluno INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    maquina VARCHAR(100) NOT NULL,
-    descricao TEXT
+    descricao TEXT,
+    FOREIGN KEY (id_aluno) REFERENCES alunos(id_usuario)
+);
+
+CREATE TABLE treino_exercicios (
+    id_treino INT NOT NULL,
+    id_exercicio INT NOT NULL,
+    series INT NOT NULL,
+    repeticoes INT NOT NULL,
+    PRIMARY KEY (id_treino, id_exercicio),
+    FOREIGN KEY (id_treino) REFERENCES treinos(id_treino),
+    FOREIGN KEY (id_exercicio) REFERENCES exercicios(id_exercicio)
 );
