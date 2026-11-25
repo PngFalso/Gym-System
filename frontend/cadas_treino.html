@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Professor</title>
+    <style>
+        /* Estilos da agenda */
+        .item-agenda {
+            border-bottom: 1px solid #444;
+            transition: opacity 0.2s, background-color 0.2s;
+        }
+        .item-agenda:last-child {
+            border-bottom: none;
+        }
+        .item-agenda:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        .item-agenda label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+        }
+        .check-concluido {
+            width: 20px;
+            height: 20px;
+            accent-color: #28a745;
+            cursor: pointer;
+        }
+        .item-agenda:has(.check-concluido:checked) {
+            opacity: 0.45;
+        }
+        .item-agenda:has(.check-concluido:checked) .info-agenda {
+            text-decoration: line-through;
+        }
+
+        /* Estilos da aba de alunos */
+        .item-aluno {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #444;
+            transition: background-color 0.2s;
+        }
+        .item-aluno:last-child {
+            border-bottom: none;
+        }
+        .item-aluno:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        .aluno-selecionavel {
+            cursor: pointer;
+            flex: 1;
+        }
+        .aluno-selecionavel:hover strong {
+            color: #4da3ff;
+            text-decoration: underline;
+        }
+        .btn-criar-treino {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 9px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-criar-treino:hover {
+            background-color: #218838;
+        }
+
+        /* Estilos dos treinos do aluno */
+        .item-treino-aluno {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #444;
+        }
+        .item-treino-aluno:last-child {
+            border-bottom: none;
+        }
+        .btn-editar-treino {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-editar-treino:hover {
+            background-color: #0069d9;
+        }
+        .btn-voltar {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-voltar:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body style="background-color: rgb(34, 27, 27); margin: 0; font-family: sans-serif; color: white;">
+
+    <!-- Cabeçalho e navegação entre abas -->
+    <header style="background-color: #2b2525; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444;">
+        <nav style="display: flex; gap: 10px;">
+            <button onclick="mudarAba('treinos')" id="btn-treinos" style="background: none; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid #007bff;">
+                exercício
+            </button>
+            <button onclick="mudarAba('alunos')" id="btn-alunos" style="background: none; border: none; color: #aaa; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid transparent;">
+                Alunos
+            </button>
+            <button onclick="mudarAba('agenda')" id="btn-agenda" style="background: none; border: none; color: #aaa; font-size: 18px; font-weight: bold; cursor: pointer; padding: 8px 16px; border-bottom: 3px solid transparent;">
+                Agenda
+            </button>
+        </nav>
+
+        <div style="font-size: 18px; font-weight: bold;" id="nome-professor">
+            Nome_professor
+        </div>
+    </header>
+
+    <main style="padding: 30px; max-width: 900px; margin: 0 auto;">
+
+        <!-- Seção Treinos -->
+        <section id="aba-treinos" style="display: block;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Gerenciamento de Exercício</h2>
+                
+                <button onclick="abrirSubtelaCriarExercicio()" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Cadastrar Exercício
+                </button>
+            </div>
+            
+            <input type="text" id="campo-pesquisa" onkeyup="filtrarTreinos()" placeholder="Pesquisar exercício..." style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;">
+
+            <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                <ul id="lista-treinos" style="list-style-type: none; padding: 0; margin: 0;">
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção Alunos -->
+        <section id="aba-alunos" style="display: none;">
+            <div id="visao-lista-alunos">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Lista de Alunos</h2>
+                </div>
+
+                <input
+                    type="text"
+                    id="campo-pesquisa-alunos"
+                    onkeyup="filtrarAlunos()"
+                    placeholder="Pesquisar aluno por nome, e-mail ou objetivo..."
+                    style="width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; margin-bottom: 20px;"
+                >
+
+                <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                    <ul id="lista-alunos" style="list-style-type: none; padding: 0; margin: 0;">
+                    </ul>
+                </div>
+
+                <p id="sem-alunos" style="display: none; color: #ccc; font-size: 15px; margin-top: 12px;">
+                    Nenhum aluno encontrado.
+                </p>
+            </div>
+
+            <!-- Sub-aba de treinos do aluno escolhido -->
+            <div id="visao-treinos-aluno" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <div>
+                        <button type="button" class="btn-voltar" onclick="voltarParaListaAlunos()" style="margin-bottom: 10px;">
+                            ← Voltar para Alunos
+                        </button>
+                        <h2 id="titulo-treinos-aluno" style="margin: 0;">Treinos do Aluno</h2>
+                    </div>
+
+                    <button type="button" id="btn-novo-treino-aluno" class="btn-criar-treino">
+                        Criar treino
+                    </button>
+                </div>
+
+                <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                    <ul id="lista-treinos-aluno" style="list-style-type: none; padding: 0; margin: 0;"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Agenda -->
+        <section id="aba-agenda" style="display: none;">
+            <h2 style="margin-top: 0; margin-bottom: 20px;">Agenda de Horários / Aulas</h2>
+
+            <!-- Formulário de agendamento -->
+            <form action="/agendamentos" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                <input type="text" name="aluno_nome" placeholder="Nome do Aluno" required style="flex: 2; min-width: 180px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white;">
+                
+                <input type="date" name="data_agendamento" required style="flex: 1; min-width: 140px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; color-scheme: dark;">
+                
+                <input type="time" name="hora_agendamento" required style="flex: 1; min-width: 110px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white; color-scheme: dark;">
+                
+                <select name="tipo_atividade" required style="flex: 1; min-width: 160px; font-size: 16px; padding: 10px; border-radius: 6px; border: 1px solid #555; background-color: rgba(50, 45, 45, 0.8); color: white;">
+                    <option value="avaliacao_fisica">Avaliação Física</option>
+                    <option value="montagem_treino">Montagem de Treino</option>
+                    <option value="acompanhamento">Acompanhamento</option>
+                </select>
+
+                <button type="submit" style="background-color: #28a745; color: white; border: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Agendar
+                </button>
+            </form>
+
+            <!-- Lista de agendamentos -->
+            <div style="background-color: rgba(107, 93, 93, 0.25); border-radius: 8px; border: 1px solid #444; overflow: hidden;">
+                <ul id="lista-agenda" style="list-style-type: none; padding: 0; margin: 0;">
+                    <li class="item-agenda" data-id="1">
+                        <label>
+                            <div class="info-agenda">
+                                <strong style="font-size: 17px;">20/11/2026 às 08:00 — Lucas Silva</strong>
+                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Avaliação Física</div>
+                            </div>
+                            <input type="checkbox" name="concluido" value="1" class="check-concluido">
+                        </label>
+                    </li>
+
+                    <li class="item-agenda" data-id="2">
+                        <label>
+                            <div class="info-agenda">
+                                <strong style="font-size: 17px;">20/11/2026 às 09:30 — Mariana Costa</strong>
+                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Montagem de Treino</div>
+                            </div>
+                            <input type="checkbox" name="concluido" value="2" class="check-concluido">
+                        </label>
+                    </li>
+
+                    <li class="item-agenda" data-id="3">
+                        <label>
+                            <div class="info-agenda">
+                                <strong style="font-size: 17px;">20/11/2026 às 14:00 — Pedro Henrique</strong>
+                                <div style="color: #ddd; font-size: 14px; margin-top: 4px;">Atividade: Acompanhamento</div>
+                            </div>
+                            <input type="checkbox" name="concluido" value="3" class="check-concluido">
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    <div id="subtela-criar-exercicio" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000;">
+
+        <div style="background: #302828; padding: 22px; border-radius: 8px; width: 90%; max-width: 600px; border: 1px solid #555;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin: 0;">Criar exercício</h3>
+                    <p style="margin-top: 5px; color: #ddd;">Preencha o nome, a máquina utilizada e como fazer</p>
+                </div>
+
+            <button type="button" onclick="fecharSubtelaCriarExercicio()">Fechar</button>
+            </div>
+
+        <hr style="border-color: #555;">
+
+            <form id="form-exercicio" onsubmit="salvarNovoExercicio(event)">
+
+                <input type="text" id="input-nome-exercicio" placeholder="Nome do exercício" required style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;">
+
+                <input type="text" id="input-maquina-exercicio" placeholder="Máquina utilizada" required style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;">
+
+                <textarea id="input-descricao-exercicio" placeholder="Descrição de como fazer o exercício..." required style="width: 100%; box-sizing: border-box; height: 85px; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;"></textarea>
+
+                <button type="submit" style="width: 100%; padding: 12px; margin-top: 5px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                    Salvar exercício
+                </button>
+
+            </form>
+        </div>
+    </div>
+    <div id="subtela-editar-treino" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 20px 0;">
+
+        <div style="background: #302828; padding: 22px; border-radius: 8px; width: 90%; max-width: 600px; border: 1px solid #555; margin: auto;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin: 0;">Editar treino</h3>
+                    <p style="margin-top: 5px; color: #ddd;">Altere as informações e os exercícios do treino</p>
+                </div>
+
+                <button type="button" onclick="fecharSubtelaEditarTreino()">Fechar</button>
+            </div>
+
+            <hr style="border-color: #555;">
+
+            <form id="form-editar-treino" onsubmit="salvarEdicaoTreino(event)">
+
+                <input
+                    type="text"
+                    id="input-nome-treino-edicao"
+                    placeholder="Nome do treino"
+                    required
+                    style="width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;"
+                >
+
+                <textarea
+                    id="input-descricao-treino-edicao"
+                    placeholder="Descrição do treino"
+                    style="width: 100%; box-sizing: border-box; height: 75px; padding: 12px; margin: 8px 0; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;"
+                ></textarea>
+
+                <h4>Adicionar exercício</h4>
+
+                <div style="display: flex; gap: 8px;">
+                    <select
+                        id="select-exercicio-edicao"
+                        style="flex: 1; min-width: 0; padding: 10px; background: #302828; color: white; border: 1px solid #666; border-radius: 6px;"
+                    >
+                        <option value="">Selecione um exercício</option>
+                    </select>
+
+                    <button
+                        type="button"
+                        onclick="adicionarExercicioEdicao()"
+                        style="padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;"
+                    >
+                        Adicionar
+                    </button>
+                </div>
+
+                <h4>Exercícios do treino</h4>
+
+                <ul id="lista-exercicios-edicao" style="list-style: none; padding: 0; margin: 0 0 15px 0;">
+                </ul>
+
+                <button
+                    type="submit"
+                    style="width: 100%; padding: 12px; margin-top: 5px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;"
+                >
+                    Salvar alterações
+                </button>
+
+            </form>
+        </div>
+    </div>
+    </main>
+
+    <!-- Scripts da interface -->
+
+<script>
+    let alunoAtualId = null;
+    let alunoAtualNome = "";
+
+    let treinoEditandoId = null;
+    let exerciciosDisponiveis = [];
+    let exerciciosEdicao = [];
+
+    async function mudarAba(nomeAba) {
+        document.getElementById("aba-treinos").style.display =
+            nomeAba === "treinos" ? "block" : "none";
+
+        document.getElementById("aba-alunos").style.display =
+            nomeAba === "alunos" ? "block" : "none";
+
+        document.getElementById("aba-agenda").style.display =
+            nomeAba === "agenda" ? "block" : "none";
+
+        document.getElementById("btn-treinos").style.borderColor =
+            nomeAba === "treinos" ? "#007bff" : "transparent";
+
+        document.getElementById("btn-treinos").style.color =
+            nomeAba === "treinos" ? "white" : "#aaa";
+
+        document.getElementById("btn-alunos").style.borderColor =
+            nomeAba === "alunos" ? "#007bff" : "transparent";
+
+        document.getElementById("btn-alunos").style.color =
+            nomeAba === "alunos" ? "white" : "#aaa";
+
+        document.getElementById("btn-agenda").style.borderColor =
+            nomeAba === "agenda" ? "#007bff" : "transparent";
+
+        document.getElementById("btn-agenda").style.color =
+            nomeAba === "agenda" ? "white" : "#aaa";
+
+        if (nomeAba === "alunos") {
+            voltarParaListaAlunos();
+        }
+    }
+
+    function filtrarTreinos() {
+        const termo = document.getElementById("campo-pesquisa").value.toLowerCase();
+        const itens = document.getElementById("lista-treinos").getElementsByTagName("li");
+
+        for (const item of itens) {
+            const texto = item.textContent || item.innerText;
+
+            item.style.display = texto.toLowerCase().includes(termo) ? "" : "none";
+        }
+    }
+
+    async function carregarExercicios() {
+        const lista = document.getElementById("lista-treinos");
+
+        try {
+            const resposta = await fetch("http://127.0.0.1:5000/exercicios");
+            const exercicios = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(exercicios.mensagem || "Erro ao carregar exercícios.");
+            }
+
+            exerciciosDisponiveis = exercicios;
+
+            lista.innerHTML = "";
+
+            if (exercicios.length === 0) {
+                lista.innerHTML = `
+                    <li style="padding: 18px; color: #ccc;">
+                        Nenhum exercício cadastrado.
+                    </li>
+                `;
+                return;
+            }
+
+            exercicios.forEach(exercicio => {
+                const item = document.createElement("li");
+                item.style.borderBottom = "1px solid #444";
+
+                const detalhes = document.createElement("details");
+                detalhes.style.padding = "15px";
+                detalhes.style.cursor = "pointer";
+
+                const titulo = document.createElement("summary");
+                titulo.style.fontSize = "18px";
+                titulo.style.fontWeight = "bold";
+                titulo.textContent = exercicio.nome;
+
+                const descricao = document.createElement("p");
+                descricao.style.marginTop = "10px";
+                descricao.style.marginBottom = "0";
+                descricao.style.color = "#ddd";
+                descricao.style.fontSize = "15px";
+                descricao.style.lineHeight = "1.5";
+
+                const maquina = document.createElement("strong");
+                maquina.textContent = "Máquina utilizada: ";
+
+                const textoMaquina = document.createTextNode(exercicio.maquina);
+
+                const quebra = document.createElement("br");
+
+                const textoDescricao = document.createElement("strong");
+                textoDescricao.textContent = "Descrição: ";
+
+                const conteudoDescricao = document.createTextNode(exercicio.descricao);
+
+                descricao.append(
+                    maquina,
+                    textoMaquina,
+                    quebra,
+                    textoDescricao,
+                    conteudoDescricao
+                );
+
+                detalhes.append(titulo, descricao);
+                item.appendChild(detalhes);
+                lista.appendChild(item);
+            });
+
+            filtrarTreinos();
+
+        } catch (erro) {
+            console.error("Erro ao carregar exercícios:", erro);
+
+            lista.innerHTML = `
+                <li style="padding: 18px; color: #ff7777;">
+                    Não foi possível carregar os exercícios.
+                </li>
+            `;
+        }
+    }
+
+    function abrirSubtelaCriarExercicio() {
+        document.getElementById("form-exercicio").reset();
+
+        document.getElementById("subtela-criar-exercicio").style.display = "flex";
+    }
+
+    function fecharSubtelaCriarExercicio() {
+        document.getElementById("subtela-criar-exercicio").style.display = "none";
+    }
+
+    async function salvarNovoExercicio(event) {
+        event.preventDefault();
+
+        const nome = document.getElementById("input-nome-exercicio").value.trim();
+        const maquina = document.getElementById("input-maquina-exercicio").value.trim();
+        const descricao = document.getElementById("input-descricao-exercicio").value.trim();
+
+        const dados = new FormData();
+
+        dados.append("nome", nome);
+        dados.append("maquina", maquina);
+        dados.append("descricao", descricao);
+
+        try {
+            const resposta = await fetch("http://127.0.0.1:5000/cadastro/exercicio", {
+                method: "POST",
+                body: dados
+            });
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                alert(resultado.mensagem || "Erro ao cadastrar exercício.");
+                return;
+            }
+
+            await carregarExercicios();
+
+            fecharSubtelaCriarExercicio();
+
+            alert("Exercício cadastrado com sucesso!");
+
+        } catch (erro) {
+            console.error("Erro:", erro);
+            alert("Não foi possível conectar ao servidor.");
+        }
+    }
+
+    function filtrarAlunos() {
+        const termo = document.getElementById("campo-pesquisa-alunos").value.toLowerCase();
+        const itens = document.querySelectorAll("#lista-alunos .item-aluno");
+
+        let visiveis = 0;
+
+        for (const item of itens) {
+            const texto = item.textContent || item.innerText;
+            const corresponde = texto.toLowerCase().includes(termo);
+
+            item.style.display = corresponde ? "" : "none";
+
+            if (corresponde) {
+                visiveis++;
+            }
+        }
+
+        document.getElementById("sem-alunos").style.display =
+            visiveis === 0 ? "block" : "none";
+    }
+
+    async function carregarAlunos() {
+        const lista = document.getElementById("lista-alunos");
+
+        try {
+            const resposta = await fetch("http://127.0.0.1:5000/alunos");
+            const alunos = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(alunos.mensagem || "Erro ao carregar alunos.");
+            }
+
+            lista.innerHTML = "";
+
+            if (alunos.length === 0) {
+                lista.innerHTML = `
+                    <li style="padding: 18px; color: #ccc;">
+                        Nenhum aluno cadastrado.
+                    </li>
+                `;
+
+                document.getElementById("sem-alunos").style.display = "none";
+                return;
+            }
+
+            alunos.forEach(aluno => {
+                const item = document.createElement("li");
+                item.className = "item-aluno";
+                item.dataset.alunoId = aluno.id_usuario;
+                item.dataset.alunoNome = aluno.nome;
+
+                const conteudo = document.createElement("div");
+                conteudo.className = "aluno-selecionavel";
+
+                const nome = document.createElement("strong");
+                nome.style.fontSize = "17px";
+                nome.textContent = aluno.nome;
+
+                const email = document.createElement("div");
+                email.style.color = "#ddd";
+                email.style.fontSize = "14px";
+                email.style.marginTop = "4px";
+                email.textContent = aluno.email;
+
+                conteudo.append(nome, email);
+
+                conteudo.onclick = () => {
+                    abrirTreinosAluno(aluno.id_usuario, aluno.nome);
+                };
+
+                item.appendChild(conteudo);
+                lista.appendChild(item);
+            });
+
+            filtrarAlunos();
+
+        } catch (erro) {
+            console.error("Erro ao carregar alunos:", erro);
+
+            lista.innerHTML = `
+                <li style="padding: 18px; color: #ff7777;">
+                    Não foi possível carregar os alunos.
+                </li>
+            `;
+        }
+    }
+
+    async function abrirTreinosAluno(idAluno, nomeAluno) {
+        alunoAtualId = idAluno;
+        alunoAtualNome = nomeAluno;
+
+        document.getElementById("visao-lista-alunos").style.display = "none";
+        document.getElementById("visao-treinos-aluno").style.display = "block";
+
+        document.getElementById("titulo-treinos-aluno").textContent =
+            `Treinos de ${nomeAluno}`;
+
+        document.getElementById("btn-novo-treino-aluno").onclick = () => {
+            criarTreinoAluno(idAluno, nomeAluno);
+        };
+
+        const lista = document.getElementById("lista-treinos-aluno");
+
+        lista.innerHTML = `
+            <li style="padding: 18px 20px; color: #ccc;">
+                Carregando treinos...
+            </li>
+        `;
+
+        try {
+            const resposta = await fetch(
+                `http://127.0.0.1:5000/treinos/${idAluno}`
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Erro ao consultar os treinos.");
+            }
+
+            const treinos = await resposta.json();
+
+            lista.innerHTML = "";
+
+            if (treinos.length === 0) {
+                lista.innerHTML = `
+                    <li style="padding: 18px 20px; color: #ccc;">
+                        Nenhum treino cadastrado para este aluno ainda.
+                    </li>
+                `;
+                return;
+            }
+
+            treinos.forEach(treino => {
+                const item = document.createElement("li");
+                item.className = "item-treino-aluno";
+
+                const detalhes = document.createElement("div");
+                detalhes.style.flex = "1";
+
+                const nome = document.createElement("strong");
+                nome.style.fontSize = "17px";
+                nome.textContent = treino.nome;
+
+                const descricao = document.createElement("div");
+                descricao.style.color = "#ddd";
+                descricao.style.fontSize = "14px";
+                descricao.style.marginTop = "4px";
+                descricao.textContent = treino.descricao || "Sem descrição";
+
+                const tituloExercicios = document.createElement("strong");
+                tituloExercicios.textContent = "Exercícios:";
+                tituloExercicios.style.display = "block";
+                tituloExercicios.style.marginTop = "14px";
+
+                const listaExercicios = document.createElement("ul");
+                listaExercicios.style.paddingLeft = "20px";
+                listaExercicios.style.marginTop = "4px";
+
+                treino.exercicios.forEach(exercicio => {
+                    const li = document.createElement("li");
+
+                    li.textContent =
+                        `${exercicio.nome} — ${exercicio.series} séries de ${exercicio.repeticoes} repetições`;
+
+                    listaExercicios.appendChild(li);
+                });
+
+                detalhes.append(
+                    nome,
+                    descricao,
+                    tituloExercicios,
+                    listaExercicios
+                );
+
+                const botao = document.createElement("button");
+                botao.type = "button";
+                botao.className = "btn-editar-treino";
+                botao.textContent = "Editar treino";
+
+                botao.onclick = () => {
+                    abrirSubtelaEditarTreino(treino);
+                };
+
+                item.append(detalhes, botao);
+                lista.appendChild(item);
+            });
+
+        } catch (erro) {
+            console.error("Erro ao carregar treinos:", erro);
+
+            lista.innerHTML = `
+                <li style="padding: 18px 20px; color: #ff7777;">
+                    Não foi possível carregar os treinos.
+                </li>
+            `;
+        }
+    }
+
+    function voltarParaListaAlunos() {
+        document.getElementById("visao-treinos-aluno").style.display = "none";
+        document.getElementById("visao-lista-alunos").style.display = "block";
+    }
+
+    function criarTreinoAluno(idAluno, nomeAluno) {
+        const params = new URLSearchParams({
+            aluno_id: idAluno,
+            aluno_nome: nomeAluno
+        });
+
+        window.location.href = `cadas_treino.html?${params.toString()}`;
+    }
+
+    async function abrirSubtelaEditarTreino(treino) {
+        treinoEditandoId = treino.id_treino;
+
+        if (exerciciosDisponiveis.length === 0) {
+            await carregarExercicios();
+        }
+
+        document.getElementById("input-nome-treino-edicao").value = treino.nome;
+
+        document.getElementById("input-descricao-treino-edicao").value =
+            treino.descricao || "";
+
+        exerciciosEdicao = treino.exercicios.map(exercicio => ({
+            id_exercicio: Number(exercicio.id_exercicio),
+            nome: exercicio.nome,
+            series: Number(exercicio.series),
+            repeticoes: Number(exercicio.repeticoes)
+        }));
+
+        const select = document.getElementById("select-exercicio-edicao");
+
+        select.innerHTML = '<option value="">Selecione um exercício</option>';
+
+        exerciciosDisponiveis.forEach(exercicio => {
+            const opcao = document.createElement("option");
+
+            opcao.value = exercicio.id_exercicio;
+            opcao.textContent = exercicio.nome;
+
+            select.appendChild(opcao);
+        });
+
+        renderizarExerciciosEdicao();
+
+        document.getElementById("subtela-editar-treino").style.display = "flex";
+    }
+
+    function fecharSubtelaEditarTreino() {
+        document.getElementById("subtela-editar-treino").style.display = "none";
+
+        document.getElementById("form-editar-treino").reset();
+
+        treinoEditandoId = null;
+        exerciciosEdicao = [];
+    }
+
+    function adicionarExercicioEdicao() {
+        const select = document.getElementById("select-exercicio-edicao");
+        const idExercicio = Number(select.value);
+
+        if (!idExercicio) {
+            alert("Selecione um exercício.");
+            return;
+        }
+
+        if (exerciciosEdicao.some(e => e.id_exercicio === idExercicio)) {
+            alert("Esse exercício já está no treino.");
+            return;
+        }
+
+        const exercicio = exerciciosDisponiveis.find(
+            e => Number(e.id_exercicio) === idExercicio
+        );
+
+        if (!exercicio) {
+            alert("Exercício não encontrado.");
+            return;
+        }
+
+        exerciciosEdicao.push({
+            id_exercicio: idExercicio,
+            nome: exercicio.nome,
+            series: 3,
+            repeticoes: 10
+        });
+
+        select.value = "";
+
+        renderizarExerciciosEdicao();
+    }
+
+    function renderizarExerciciosEdicao() {
+        const lista = document.getElementById("lista-exercicios-edicao");
+
+        lista.innerHTML = "";
+
+        if (exerciciosEdicao.length === 0) {
+            lista.innerHTML = `
+                <li style="padding: 12px; color: #ccc;">
+                    Nenhum exercício adicionado.
+                </li>
+            `;
+            return;
+        }
+
+        exerciciosEdicao.forEach((exercicio, indice) => {
+            const item = document.createElement("li");
+
+            item.style.padding = "12px";
+            item.style.marginBottom = "8px";
+            item.style.background = "#3a3232";
+            item.style.border = "1px solid #555";
+            item.style.borderRadius = "6px";
+
+            const nome = document.createElement("strong");
+            nome.textContent = exercicio.nome;
+
+            const campos = document.createElement("div");
+
+            campos.style.display = "flex";
+            campos.style.gap = "8px";
+            campos.style.alignItems = "center";
+            campos.style.marginTop = "10px";
+            campos.style.flexWrap = "wrap";
+
+            const series = document.createElement("input");
+
+            series.type = "number";
+            series.min = "1";
+            series.step = "1";
+            series.value = exercicio.series;
+            series.placeholder = "Séries";
+            series.style.width = "75px";
+            series.style.padding = "8px";
+            series.style.background = "#302828";
+            series.style.color = "white";
+            series.style.border = "1px solid #666";
+            series.style.borderRadius = "5px";
+
+            series.oninput = () => {
+                exerciciosEdicao[indice].series = Number(series.value);
+            };
+
+            const repeticoes = document.createElement("input");
+
+            repeticoes.type = "number";
+            repeticoes.min = "1";
+            repeticoes.step = "1";
+            repeticoes.value = exercicio.repeticoes;
+            repeticoes.placeholder = "Repetições";
+            repeticoes.style.width = "90px";
+            repeticoes.style.padding = "8px";
+            repeticoes.style.background = "#302828";
+            repeticoes.style.color = "white";
+            repeticoes.style.border = "1px solid #666";
+            repeticoes.style.borderRadius = "5px";
+
+            repeticoes.oninput = () => {
+                exerciciosEdicao[indice].repeticoes = Number(repeticoes.value);
+            };
+
+            const remover = document.createElement("button");
+
+            remover.type = "button";
+            remover.textContent = "Remover";
+            remover.style.padding = "8px";
+            remover.style.background = "#8b3030";
+            remover.style.color = "white";
+            remover.style.border = "none";
+            remover.style.borderRadius = "5px";
+            remover.style.cursor = "pointer";
+
+            remover.onclick = () => {
+                exerciciosEdicao.splice(indice, 1);
+                renderizarExerciciosEdicao();
+            };
+
+            campos.append(series, repeticoes, remover);
+            item.append(nome, campos);
+            lista.appendChild(item);
+        });
+    }
+
+    async function salvarEdicaoTreino(event) {
+        event.preventDefault();
+
+        const nome = document.getElementById("input-nome-treino-edicao").value.trim();
+
+        const descricao = document.getElementById("input-descricao-treino-edicao").value.trim();
+
+        if (!nome || exerciciosEdicao.length === 0) {
+            alert("Informe o nome e adicione pelo menos um exercício.");
+            return;
+        }
+
+        const validos = exerciciosEdicao.every(exercicio =>
+            Number.isInteger(exercicio.series) &&
+            Number.isInteger(exercicio.repeticoes) &&
+            exercicio.series > 0 &&
+            exercicio.repeticoes > 0
+        );
+
+        if (!validos) {
+            alert("Séries e repetições devem ser números inteiros maiores que zero.");
+            return;
+        }
+
+        try {
+            const resposta = await fetch(
+                `http://127.0.0.1:5000/treinos/${treinoEditandoId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nome: nome,
+                        descricao: descricao,
+                        exercicios: exerciciosEdicao
+                    })
+                }
+            );
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                alert(resultado.mensagem || "Erro ao atualizar treino.");
+                return;
+            }
+
+            fecharSubtelaEditarTreino();
+
+            await abrirTreinosAluno(alunoAtualId, alunoAtualNome);
+
+            alert("Treino atualizado com sucesso!");
+
+        } catch (erro) {
+            console.error("Erro ao editar treino:", erro);
+            alert("Não foi possível conectar ao servidor.");
+        }
+    }
+
+    carregarExercicios();
+    carregarAlunos();
+</script>
+
+</body>
+</html>
