@@ -221,3 +221,54 @@ def cadastrar_professor():
 
         if conexao:
             conexao.close()
+
+
+@cadastro_bp.route("/cadastro/exercicio", methods=["POST"])
+def cadastrar_exercicio():
+    nome = request.form.get("nome", "").strip()
+    grupo_muscular = request.form.get("grupo_muscular", "").strip()
+    descricao = request.form.get("descricao", "").strip()
+
+    if not nome or not grupo_muscular:
+        return jsonify({
+            "status": "erro",
+            "mensagem": "Preencha o nome e o grupo muscular."
+        }), 400
+
+    conexao = None
+    cursor = None
+
+    try:
+        conexao = conectar_banco()
+        cursor = conexao.cursor()
+
+        cursor.execute("""
+            INSERT INTO exercicios (nome, grupo_muscular, descricao)
+            VALUES (%s, %s, %s)
+        """, (nome, grupo_muscular, descricao))
+
+        conexao.commit()
+
+        return jsonify({
+            "status": "sucesso",
+            "mensagem": "Exercício cadastrado com sucesso."
+        }), 201
+
+    except mysql.connector.Error as erro:
+        print("Erro MySQL:", erro)
+
+        if conexao:
+            conexao.rollback()
+
+        return jsonify({
+            "status": "erro",
+            "mensagem": "Erro ao realizar o cadastro do exercício."
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if conexao:
+            conexao.close()
+
