@@ -35,6 +35,6 @@ CREATE TABLE funcionarios (
 CREATE TABLE exercicios (
     id_exercicio INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    grupo_muscular VARCHAR(100) NOT NULL,
+    maquina VARCHAR(100) NOT NULL,
     descricao TEXT
 );
